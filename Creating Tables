@@ -1,0 +1,7 @@
+CREATE TABLE user (
+    user_id int,
+    username varchar(11),
+    userpassword varchar(11),
+    
+    primary key(user_id);
+);
