@@ -22,3 +22,5 @@ insert into book(title) values ('How to Reboot a Computer');
 insert into book(title) values ('How to Make a Computer Do What You Want');
 insert into book(title) values ('How to Turn Off a Computer');
 insert into book(title) values ('How to Go Outside and Play');
+
+insert into book(title) values ('How to fix');
