@@ -13,8 +13,11 @@ GET_TITLE_ISBN = ("SELECT book.title"
 
 #2 (user_id, username, password)
 INSERT_USER = ("INSERT INTO user "
-"VALUES(%s, %s, %s")
+"VALUES(%s, %s, %s)")
 
+#3 Insert Book
+INSERT_BOOK = (“INSERT INTO book”
+               “VALUES(%s, %s, %s, %s)")
 #4 get title by isbn
 GET_TITLE_ISBN = ("COUNT(DISTINCT ISBN)"
 "FROM book "
@@ -25,6 +28,9 @@ BUY_BOOK = ("UPDATE listing "
 "SET listing_status = 'sold', order_basket_id = %s "
 "WHERE listing_id = %s")
 
+INSERT_PUBLISHER = (“INSERT INTO publisher (pub_id, pub_name)”
+               “VALUES(%s, %s)”)
+
 #7 (author_id, author_name)
 INSERT_AUTHOR = ("INSERT INTO author "
 "VALUES(%s, %s)")
@@ -32,6 +38,10 @@ INSERT_AUTHOR = ("INSERT INTO author "
 #8 (listing_id, user.user_id, order_basket_id, IBSN, price, listing_status, listing_condition)
 INSERT_LISTING =  ("INSERT INTO listing "
 "VALUES(%s, %s, %s, %s, %s, %s, %s, %s)")
+
+INSERT_ORDER_BASKET = (“INSERT INTO order_basket
+                       (order_id, address, date_made, order_status, user_id)”
+                       “VALUES(%s, %s, %s, %s, %s)”)
 
 #10 matches user id to basket id(user_id)
 MATCH_USER_ORDER_BASKET = ("SELECT order_basket_id"
@@ -43,6 +53,9 @@ MATCH_ORDER_BASKET_LISTING = ("SELECT listing.listing_id"
 "FROM listing, order_basket"
 "WHERE order_basket.order_basket_id = %s")
 
+MATCH_ORDER_USER = (“SELECT user_id”
+                “FROM order_basket, user”
+                “WHERE order_id = %s AND order_basket.user_id = user.user_id”)
 #13 matches isbn to author name
 MATCH_ISBN_AUTHORNAME = (
 "SELECT author.author_name"
@@ -56,6 +69,9 @@ MATCH_PUBLISHER_BOOK = (
 "WHERE book.pub_id = %s"
 )
 
+MATCH_BOOK_LISTING_ID = (“SELECT listing_id”
+                        “FROM listing, book”
+                         “WHERE book_isbn = %s AND listing.book_isbn= book.isbn”)
 #16 get number of listings for user
 GET_NUMLISTINGS = ("SELECT COUNT(DISTINCT listing_id)"
 "FROM listing"
@@ -69,7 +85,11 @@ SORT_LOWEST_PRICE = (
 "WHERE book.isbn = %s"
 "ORDER BY listing.price ASC"
 )
-
+SUM_ORDER_BASKET= (
+“SELECT SUM(price)”
+“FROM listing, order_basker”
+“WHERE listing_id = %s AND listing.order_basket_id = order_basket.order_basket_id")
+                   
 #19 takes author_id, isbn
 INSERT_AUTHORS = ("INSERT INTO authors"
 "VALUES(%s, %s)")
@@ -77,3 +97,15 @@ INSERT_AUTHORS = ("INSERT INTO authors"
 #20 takes pub_id, pub_name
 INSERT_PUBLISHER = ("INSERT INTO publisher "
 "VALUES(%s, %s)")
+
+
+
+
+
+
+
+
+
+
+
+
