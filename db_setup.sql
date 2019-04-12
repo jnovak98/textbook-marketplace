@@ -49,7 +49,7 @@ CREATE TABLE listing (
 	listing_condition varchar(32),
 	user_id int,
 	order_basket_id int,
-	book_isbn int,
+	book_isbn varchar(20),
 
 	Primary key(listing_id, user_id),
 	Foreign key(order_basket_id) references order_basket(order_basket_id),
