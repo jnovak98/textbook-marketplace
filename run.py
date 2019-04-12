@@ -1,9 +1,9 @@
-import configparser
+import ConfigParser
 from flask import Flask, render_template, request
 import mysql.connector
 
 # Read configuration from file.
-config = configparser.ConfigParser()
+config = ConfigParser.ConfigParser()
 config.read('config.ini')
 
 # Set up application server.

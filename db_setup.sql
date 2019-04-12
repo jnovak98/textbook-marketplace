@@ -48,8 +48,12 @@ CREATE TABLE listing (
 	listing_status varchar(11),
 	listing_condition varchar(32),
 	user_id int,
+	order_basket_id int,
+	book_isbn varchar(20),
+
 	Primary key(listing_id, user_id),
 	Foreign key(order_basket_id) references order_basket(order_basket_id),
+	Foreign Key(book_isbn) reference book(isbn),
 	Foreign key(user_id) references user(user_id)
 );
 
