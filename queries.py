@@ -1,60 +1,65 @@
 #INSERT_CREW = ("INSERT INTO crew(location, cuisine_type0, cuisine_type1, cuisine_type2, selected_restaurant)"
 #                "VALUES(null, null, null, null, null)")
-INSERT_CREW = ("INSERT INTO crew(selected_restaurant, vote_started) "
-                "VALUES(null, false)")
-UPDATE_CREW_LOCATION_CUISINETYPE = ("UPDATE crew "
-                                    "SET location=%s, cuisine_type0=%s, cuisine_type1=%s, cuisine_type2=%s "
-                                    "WHERE crew_id=%s")
-GET_CREW = ("SELECT crew_id "
-            "FROM crew "
-            "WHERE crew_id=%s")
+GET_ISBN_TITLE = ("SELECT book.ISBN "
+"FROM book "
+"WHERE book.title = %s")
 
-UPDATE_CREW_VOTING = ("UPDATE crew "
-                        "SET vote_started=%s "
-                        "WHERE crew_id=%s ")
+GET_TITLE_ISBN = ("SELECT book.title"
+"FROM book "
+"WHERE book.ISBN = %s")
 
-GET_CREW_VOTING = ("SELECT vote_started "
-                    "FROM crew "
-                    "WHERE crew_id=%s")
+INSERT_USER = ("INSERT INTO user "
+"VALUES(%s, %s, %s")
 
-GET_CREW_SELECTED_REST = ("SELECT selected_restaurant "
-                            "FROM crew "
-                            "WHERE crew_id=%s")
+GET_TITLE_ISBN = ("COUNT(DISTINCT ISBN)"
+"FROM book "
+"WHERE book.ISBN = %s")
 
-SELECTED_RESTAURANT = ("SELECT restaurant_id "
-                        "FROM vote "
-                        "WHERE crew_id = %s "
-                        "GROUP BY restaurant_id "
-                        "HAVING MAX(vote_num)")
-UPDATE_CREW_SELECTED_RESTAURANT = ("UPDATE crew "
-                                    "SET selected_restaurant=%s "
-                                    "WHERE crew_id=%s")
-DELETE_CREW = ("DELETE FROM crew "
-                "WHERE crew_id=%s")
+BUY_BOOK = ("DELETE FROM BOOK "
+"FROM book "
+"WHERE book.ISBN = %s")
 
-RESTAURANT_EXISTS = ("SELECT restaurant_id "
-                    "FROM restaurant "
-                    "WHERE address=%s")
-INSERT_RESTAURANT = ("INSERT INTO restaurant(name, cuisine, address, rating, price_range, menu_url, image_url) "
-                    "VALUES(%s, %s, %s, %s, %s, %s, %s)")
-GET_RESTAURANT_IDS = ("SELECT restaurant_id "
-                        "FROM vote "
-                        "WHERE crew_id=%s")
-GET_RESTID_INFO = ("SELECT restaurant_id, name, cuisine, address, rating, price_range, menu_url, image_url "
-                    "FROM restaurant "
-                    "WHERE restaurant_id=%s")
-INSERT_VOTE = ("INSERT INTO vote(crew_id, restaurant_id, vote_num) "
-                    "VALUES(%s, %s, 0)")
+INSERT_AUTHOR = ("INSERT INTO author "
+"VALUES(%s, %s)")
 
-GET_VOTE_NUM = ("SELECT vote_num FROM vote "
-                    "WHERE crew_id=%s AND restaurant_id=%s")
+INSERT_LISTING =  ("INSERT INTO listing "
+"VALUES(%s, %s, %s, %s, %s, %s, %s)")
 
-UPDATE_VOTE_COUNT = ("UPDATE vote "
-                    "SET vote_num =%s "
-                    "WHERE crew_id=%s AND restaurant_id=%s")
-GET_CREW_VOTES = ("SELECT vote_id "
-                    "FROM vote "
-                    "WHERE crew_id=%s")
+MATCH_USER_ORDER_BASKET = ("SELECT order_basket_id"
+"FROM order_basket, user"
+"WHERE order_basket.user_id = uuser.user_id")
 
-DELETE_CREW_VOTES = ("DELETE FROM vote "
-                    "WHERE vote_id=%s")
+MATCH_ORDER_BASKET_LISTING = ("SELECT listing.listing_id"
+"FROM listing, order_basket"
+"WHERE order_basket.order_basket_id = listing.order_order_basket_id")
+
+
+
+MATCH_AUTHORNAME_ISBN = (
+"SELECT author.author_name"
+"FROM authors, author"
+"WHERE author.author_id = authors.author_id ^ authors.isbn = %s")
+
+MATCH_PUBLISHER_BOOK = (
+"SELECT book.ISBN"
+"FROM book, publisher"
+"WHERE book.publisher_pub_id = publisher.pub_id"
+)
+
+
+SORT_LOWEST_PRICE = (
+"SELECT listing.listing_id"
+"FROM LISTING"
+"ORDER BY listing.price ASC"
+)
+
+GET_NUMLISTINGS = ("SELECT COUNT(DISTINCT listing_id)"
+"FROM user, listing"
+"WHERE user.user_id = listing.user_id")
+
+
+INSERT_AUTHORS = ("INSERT INTO authors"
+"VALUES(%s, %s)")
+
+INSERT_PUBLISHER = ("INSERT INTO publisher "
+"VALUES(%s, %s)")
