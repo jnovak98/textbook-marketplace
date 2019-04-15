@@ -67,7 +67,7 @@ def getNumISBN(isbn):
 
 #7
 def insertAuthor(author_id, author_name):
-    return sql_query(INSERT_AUTHOR,author_id, author_name)
+    return sql_query(INSERT_AUTHOR, (author_id, author_name))
 
 #10
 def matchUserIDOrderBasket(user_id):
@@ -83,4 +83,4 @@ def getNumListings(isbn):
 
 #19
 def insertPublisher(pub_id, pub_name):
-    return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
+    return sql_query(INSERT_PUBLISHER, (pub_id, pub_name))
