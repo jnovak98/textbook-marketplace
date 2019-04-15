@@ -19,7 +19,7 @@ INSERT_USER = ("INSERT INTO user "
 INSERT_BOOK = (“INSERT INTO book”
                “VALUES(%s, %s, %s, %s)")
 #4 get title by isbn
-GET_ISBNCOUNT = ("COUNT(DISTINCT ISBN)"
+GET_NUMISBN = ("COUNT(DISTINCT ISBN)"
 "FROM book "
 "WHERE book.ISBN = %s")
 
