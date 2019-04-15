@@ -54,3 +54,33 @@ def template_response_with_data():
 
 if __name__ == '__main__':
     app.run(**config['app'])
+#1a
+def getISBNTitle(title):
+    return sql_query(GET_ISBN_TITLE, title)
+#1b
+def getTitleISBN(isbn):
+    return sql_query(GET_TITLE_ISBN, isbn)
+
+#4
+def getNumISBN(isbn):
+    return sql_query(GET_ISBNCOUNT, ISBN)
+
+#7
+def insertAuthor(author_id, author_name):
+    return sql_query(INSERT_AUTHOR,author_id, author_name)
+
+#10
+def matchUserIDOrderBasket(user_id):
+    return sql_query(MATCH_USER_ORDER_BASKET,user_id)
+
+#13
+def matchISBNAuthorName(isbn):
+    return sql_query(MATCH_ISBN_AUTHORNAME,isbn)
+
+#16
+def getNumListings(isbn):
+    return sql_query(GET_NUMLISTINGS, isbn)
+
+#19
+def insertPublisher(pub_id, pub_name):
+    return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
