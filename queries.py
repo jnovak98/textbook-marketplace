@@ -39,7 +39,7 @@ INSERT_AUTHOR = ("INSERT INTO author "
 
 #8 (listing_id, user.user_id, order_basket_id, IBSN, price, listing_status, listing_condition)
 INSERT_LISTING =  ("INSERT INTO listing "
-"VALUES(%s, %s, %s, %s, %s, %s, %s, %s)")
+"VALUES(%s, %s, %s, %s, %s, %s, %s)")
 
 #9 Insert Order Basket
 INSERT_ORDER_BASKET = ("INSERT INTO order_basket"
