@@ -1,5 +1,4 @@
-#INSERT_CREW = ("INSERT INTO crew(location, cuisine_type0, cuisine_type1, cuisine_type2, selected_restaurant)"
-#                "VALUES(null, null, null, null, null)")
+
 
 #1.A
 GET_ISBN_TITLE = ("SELECT book.ISBN "

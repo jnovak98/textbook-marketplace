@@ -1,9 +1,9 @@
-import ConfigParser
+import configparser
 from flask import Flask, render_template, request
 import mysql.connector
 
 # Read configuration from file.
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read('config.ini')
 
 # Set up application server.
@@ -31,13 +31,14 @@ def sql_execute(sql):
 # For this example you can select a handler function by
 # uncommenting one of the @app.route decorators.
 
-#@app.route('/')
-def basic_response():
-    return "It works!" #example
-
-#@app.route('/')
-def template_response():
+# Home page
+@app.route('/')
+@app.route('/home')
+@app.route('/index')
+def index():
     return render_template('home.html')
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():
