@@ -68,7 +68,7 @@ def getNumISBN(isbn):
 
 #7
 def insertAuthor(author_id, author_name):
-    return sql_query(INSERT_AUTHOR,author_id, author_name)
+    return sql_query(INSERT_AUTHOR, (author_id, author_name))
 
 #10
 def matchUserIDOrderBasket(user_id):
@@ -85,3 +85,26 @@ def getNumListings(isbn):
 #19
 def insertPublisher(pub_id, pub_name):
     return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
+
+#2
+def insertUser(user_id, username, password):
+    return sql_query(INSERT_USER, user_id, username, password)
+#5
+def buyBook(listing_id):
+    return sql_query(BUY_BOOK, listing_id)
+#8
+def insertListing(listing_id, price, listing_status, listing_condition, user_id, order_basket_id, book_isbn):
+    return sql_query(INSERT_LISTING, listing_id, price, listing_status, listing_condition, user_id, order_basket_id, book_isbn)
+#11
+def matchOrderBasketListing(order_basket_id):
+    return sql_query(MATCH_ORDER_BASKET_LISTING, order_basket_id)
+#14
+def matchPublisherBook(pub_id):
+    return sql_query(MATCH_PUBLISHER_BOOK, pub_id);
+#17
+def sortLowestPrice(book_isbn):
+    return sql_query(SORT_LOWEST_PRICE, book_isbn)
+#20
+def insertPublisher(pub_id, pub_name):
+    return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
+
