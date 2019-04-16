@@ -1,9 +1,9 @@
-import ConfigParser
+import configparser
 from flask import Flask, render_template, request
 import mysql.connector
 
 # Read configuration from file.
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read('config.ini')
 
 # Set up application server.
@@ -35,11 +35,11 @@ def sql_execute(sql):
 def basic_response():
     return "It works!" #example
 
-#@app.route('/')
+@app.route('/')
 def template_response():
     return render_template('home.html')
 
-@app.route('/', methods=['GET', 'POST'])
+#@app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():
     print(request.form)
     if "buy-book" in request.form:
@@ -83,7 +83,7 @@ def getNumListings(isbn):
 
 #19
 def insertPublisher(pub_id, pub_name):
-
+    return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
 #2
 def insertUser(user_id, username, password):
     return sql_query(INSERT_USER, user_id, username, password)
