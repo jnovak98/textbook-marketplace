@@ -15,7 +15,7 @@
   {% for listing in listings %}
     <article class="listing">
       <div>
-        <h2> {{ listing ['title'] }} </h2>
+        <h3> {{ listing ['title'] }} </h3>
         <div class="about">Price: {{ listing['price'] }}, Condition: {{ listing['listing_condition'] }}</div>
         <div class="details">Status: {{listing['listing_status'] }}, Listing ID: {{listing['listing_id'] }}</div>
       </div>
@@ -27,26 +27,26 @@
   <hr><hr>
   <h1>Your Order Baskets</h1>
   <a href="{{ url_for('new_order') }}">New Order Basket</a>
+  <hr>
   {% for order_basket in order_baskets %}
     <article class="order_basket">
       <div>
         <header>
-          <h2> Order Basket #{{ order_basket ['order_basket_id'] }} </h2>
+          <h3> Order Basket #{{ order_basket ['order_basket_id'] }} </h3>
           <div class="about">Date Made: {{ order_basket['date_made'] }}, Address: {{ order_basket['address'] }}</div>
           <div class="details">Status: {{order_basket['order_basket_status'] }}</div>
         </header>
-        <div>
-          <h3>Contents</h3>
+        <ul>
           {% for listing in order_basket['listings'] %}
             <article class="listing">
-              <div>
+              <li>
                 <b> {{ listing ['title'] }} - </b>
                 Price: {{ listing['price'] }}, Condition: {{ listing['listing_condition'] }}, 
                 Listed By: {{listing['username'] }}, Listing ID: {{listing['listing_id'] }}
-              </div>
+              </li>
             </article>
           {% endfor %}
-        </div>
+        </ul>
       </div>
     </article>
     {% if not loop.last %}
