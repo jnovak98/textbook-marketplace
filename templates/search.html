@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Home{% endblock %}</h1>
+  {% block title %}Search Results{% endblock %}
 {% endblock %}
 {% block content %}
+  <h1>Search results for {{ query }} </h1> 
     {% for book in books%}
       <article class="post">
         <header>

@@ -38,8 +38,22 @@ def basic_response():
     return "It works!" #example
 
 @app.route('/')
-def template_response():
-    return render_template('home.html')
+def index():
+    books=[{'title': 'Featured Book Title 1', 'subject': 'Math', 'description': 'This is a placeholder'},
+        {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder'},
+        {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder'}]
+    return render_template('home.html', books=books)
+
+@app.route('/search')
+def search():
+    if('query' in request.args and request.args.get('query')):
+        books=[{'title': 'Book Search Result 1', 'subject': 'Math', 'description': 'This is a placeholder search result'},
+        {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same'},
+        {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet'},
+        {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description'},]
+        return render_template('search.html', books=books, query=request.args.get('query'))
+    else:
+        return redirect(url_for('index'))
 
 #@app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():
