@@ -4,13 +4,16 @@
   {% block title %}Search Results{% endblock %}
 {% endblock %}
 {% block content %}
-  <h1>Search results for {{ query }} </h1> 
+  <h1>Search results for {{ query }}: </h1>
+  <hr><hr> 
     {% for book in books%}
-      <article class="post">
+      <article class="book">
         <header>
           <div>
-            <h1>{{ book['title'] }}</h1>
+            <h1><a class="action" href="{{ url_for('book_listings', isbn=book['isbn']) }}"> {{ book['title'] }}</a></h1>
             <div class="about">Subject: {{ book['title'] }}</div>
+            <div class="isbn">ISBN: {{ book['isbn'] }}</div>
+            <div class="authors">By: {% for author in book['authors'] %}{{ author['author_name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
           </div>
         </header>
         <p class="description">{{ book['description'] }}</p>

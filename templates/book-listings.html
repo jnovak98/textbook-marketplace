@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %} {{ book['title'] }} {% endblock %}</h1>
+  <hr><hr>
+{% endblock %}
+{% block content %}
+  <h2>About</h2>
+  <article class="book">
+    <header>
+      <div>
+        <h1>{{ book['title'] }}</h1>
+        <div class="about">Subject: {{ book['title'] }}</div>
+        <div class="authors">By: {% for author in book['authors'] %}{{ author['author_name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+        <div class="isbn">ISBN: {{ book['isbn'] }}</div>
+      </div>
+    </header>
+    <p class="description">{{ book['description'] }}</p>
+  </article>
+  <hr><hr>
+  <h2>Listings for {{ book['title'] }}</h2>
+  {% for listing in listings %}
+    <article class="listing">
+      <header>
+        <div>
+          <h1>Condition: {{ listing['listing_condition'] }}</h1>
+          <div class="about">Price: {{ listing['price'] }}</div>
+          <div class="lister">Listed by: {{ listing['username'] }}, Listing ID: {{listing['listing_id'] }}</div>
+        </div>
+      </header>
+      <form method="post">
+        <input type="submit" value="Add to basket: ">
+        <select name="order_basket_id">
+          {% for basket in baskets %}
+            <option value="{{ basket['order_basket_id'] }}">{{ basket['order_basket_id'] }}</option>
+          {% endfor %}  
+        </select>
+        <input type="hidden" id="listing_id" name="listing_id" value="{{ listing['listing_condition'] }}">
+      </form>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
