@@ -66,8 +66,8 @@ def book_listings(isbn):
         book_details={'title': 'Placeholder Book', 'subject': 'Math', 'description': 'This is a placeholder book listings page', 
             'isbn': isbn, 'authors':[{'author_name': 'Author 1'}, {'author_name': 'Author 2'}]}
         # listings of 'isbn' that are available. Make sure this includes the username of the user who made the listing
-        listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'new', 'username': 'user1'},
-        {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Fair','username': 'user2'},
+        listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'username': 'user1'},
+        {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','username': 'user2'},
         {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','username': 'user3'}]
         #User's unordered baskets 
         baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
@@ -76,7 +76,7 @@ def book_listings(isbn):
         listing_id = request.form['listing_id']
         order_basket_id = request.form['order_basket_id']
         #add listing_id to order_basket with id=order_basket_id
-        return redirect(url_for('book_listings', isbn=isbn)), 200
+        return redirect(url_for('account'))
 
 @app.route('/make-listing', methods=('GET', 'POST'))
 def make_listing():
@@ -104,6 +104,28 @@ def add_book(isbn):
         description = request.form['description']
         #add this new book to DB
         return redirect(url_for('book_listings', isbn=isbn))
+
+@app.route('/new-order', methods=('GET', 'POST'))
+def new_order():
+    if request.method == 'GET':
+        return render_template('new-order.html')
+    elif request.method == 'POST':
+        address = request.form['address']
+        #add new order basket for user at given address
+        return redirect(url_for('account'))
+
+@app.route('/account')
+def account():
+    user_details = {'username':'placeholder_username'}
+    listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'title': 'Placeholder Title 1', 'listing_status':'Listed'},
+        {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','title': 'Placeholder Title 2','listing_status':'Ordered'},
+        {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','title': 'Placeholder Title 3','listing_status':'Delivered'}]
+    order_baskets = [{'order_basket_id': 12345, 'date_made': '4/17/19', 'address': '1234 Road Rd.','order_basket_status': 'Not Ordered',
+        'listings':[{'listing_id':135135135,'price': '$21', 'listing_condition': 'New', 'username': 'user1', 'title': 'Placeholder Title 4'}]},
+        {'order_basket_id': 67890, 'date_made': '1/17/19', 'address': '3456 Street St.','order_basket_status': 'Delivered',
+        'listings':[{'listing_id':246246246,'price': '$42', 'listing_condition': 'User - Very Good', 'username': 'user2', 'title': 'Placeholder Title 5'},
+                    {'listing_id':369369369,'price': '$12', 'listing_condition': 'User - Good', 'username': 'user3', 'title': 'Placeholder Title 6'}]}]
+    return render_template('account.html', user_details=user_details,listings=listings,order_baskets=order_baskets)
 
 #@app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():

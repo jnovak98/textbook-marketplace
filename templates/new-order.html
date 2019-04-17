@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Order{% endblock %}</h1>
+  <hr><hr>
+{% endblock %}
+
+{% block content %}
+  <h2>Please enter the address this order should be delivered to</h2> 
+  <form method="post">
+    <label for="address">Address</label>
+    <input name="address" id="address" value="{{ request.form['address'] }}" required>
+    <input type="submit">
+  </form>
+{% endblock %}

@@ -6,7 +6,8 @@
     <input name="query" id="query" value="{{ request.form['query'] }}" required>
     <input type="submit" value="Search">
   </form>
-  <a href="{{ url_for('make_listing') }}">List a Textbook</a>
+  <a href="{{ url_for('make_listing') }}">List a Textbook</a> <a href="{{ url_for('account') }}">My Account</a>
+  <hr>
 </nav>
 <section class="content">
   <header>
