@@ -1,6 +1,8 @@
+#!/usr/bin/python
 import configparser
 from flask import Flask, render_template, request
 import mysql.connector
+from queries import*
 
 # Read configuration from file.
 config = configparser.ConfigParser()
@@ -54,6 +56,7 @@ def template_response_with_data():
 
 if __name__ == '__main__':
     app.run(**config['app'])
+
 #1a
 def getISBNTitle(title):
     return sql_query(GET_ISBN_TITLE, title)
