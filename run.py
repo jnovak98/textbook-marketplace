@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import configparser
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
