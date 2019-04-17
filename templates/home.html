@@ -10,7 +10,7 @@
         <header>
           <div>
             <h1><a class="action" href="{{ url_for('book_listings', isbn=book['isbn']) }}"> {{ book['title'] }}</a></h1>
-            <div class="about">Subject: {{ book['title'] }}</div>
+            <div class="about">Subject: {{ book['subject'] }}</div>
             <div class="authors">By: {% for author in book['authors'] %}{{ author['author_name'] }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
             <div class="isbn">ISBN: {{ book['isbn'] }}</div>
           </div>

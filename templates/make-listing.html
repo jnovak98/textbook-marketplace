@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Add Listing{% endblock %}</h1>
+  <hr><hr>
+{% endblock %}
+{% block content %}
+  <form method="post">
+    <label for="isbn">ISBN</label>
+    <input name="isbn" id="isbn" value="{{ request.form['isbn'] }}" input type="number" required>
+    <br>
+    <label for="listing_condition">Condition</label>
+    <select name="listing_condition" id="listing_condition" value="{{ request.form['listing_condition'] }}" required>
+      <option value="New">New</option>
+      <option value="Used - Like New">Used - Like New</option>
+      <option value="Used - Very Good">Used - Very Good</option>
+      <option value="Used - Good">Used - Good</option>
+      <option value="Used - Acceptable">Used - Acceptable</option>
+    </select>
+    <br>
+    <label for="price">Price</label>
+    <input name="price" id="price" value="{{ request.form['price'] }}" required>
+    <br>
+    <input type="submit">
+  </form>
+{% endblock %}

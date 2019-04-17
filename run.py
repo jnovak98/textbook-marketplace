@@ -72,12 +72,38 @@ def book_listings(isbn):
         #User's unordered baskets 
         baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
         return render_template('book-listings.html', book=book_details, listings=listings, baskets=baskets)
-    if request.method == 'POST':
+    elif request.method == 'POST':
         listing_id = request.form['listing_id']
         order_basket_id = request.form['order_basket_id']
-        #add listing_id to order basket with id=order_basket_id
+        #add listing_id to order_basket with id=order_basket_id
         return redirect(url_for('book_listings', isbn=isbn)), 200
 
+@app.route('/make-listing', methods=('GET', 'POST'))
+def make_listing():
+    if request.method == 'GET':
+        return render_template('make-listing.html')
+    elif request.method == 'POST':
+        isbn = request.form['isbn']
+        price = request.form['price']
+        listing_condition = request.form['listing_condition']
+        #add this listing to DB (get user from g.user['id'])
+        if False: #this should check if a book with ISBN 'isbn' already exists
+            return redirect(url_for('book_listings', isbn=isbn))
+        else:
+            return redirect(url_for('add_book', isbn=isbn))
+
+@app.route('/add-book/<int:isbn>', methods=('GET', 'POST'))
+def add_book(isbn):
+    if request.method == 'GET':
+        return render_template('add-book.html', isbn=isbn)
+    elif request.method == 'POST':
+        subject = request.form['subject']
+        title = request.form['title']
+        authors = request.form['authors'] #names seperated by commas. Might need to make new author if author with that name doesn't already exist
+        publisher = request.form['publisher'] #might have to make new publisher if publisher with this name doesn't exist
+        description = request.form['description']
+        #add this new book to DB
+        return redirect(url_for('book_listings', isbn=isbn))
 
 #@app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():
