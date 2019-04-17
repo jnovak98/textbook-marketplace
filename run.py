@@ -39,19 +39,23 @@ def basic_response():
 
 @app.route('/')
 def index():
-    books=[{'title': 'Featured Book Title 1', 'subject': 'Math', 'description': 'This is a placeholder'},
+    #we havent decided what these books should be, maybe books with most recently made listings?
+    placeholder_books=[{'title': 'Featured Book Title 1', 'subject': 'Math', 'description': 'This is a placeholder'},
         {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder'},
         {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder'}]
-    return render_template('home.html', books=books)
+    return render_template('home.html', books=placeholder_books)
 
 @app.route('/search')
 def search():
     if('query' in request.args and request.args.get('query')):
-        books=[{'title': 'Book Search Result 1', 'subject': 'Math', 'description': 'This is a placeholder search result'},
+        search_query=request.args.get('query')
+        #these books should be every book in the DB that contains "search_query", 
+        #either in the name or description, based on how much it shows up
+        placeholder_books=[{'title': 'Book Search Result 1', 'subject': 'Math', 'description': 'This is a placeholder search result'},
         {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same'},
         {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet'},
         {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description'},]
-        return render_template('search.html', books=books, query=request.args.get('query'))
+        return render_template('search.html', books=placeholder_books, query=search_query)
     else:
         return redirect(url_for('index'))
 
