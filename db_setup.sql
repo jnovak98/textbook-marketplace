@@ -13,6 +13,13 @@ CREATE TABLE user (
     primary key(user_id)
 );
 
+CREATE TABLE publisher(
+	pub_id int,
+	pub_name varchar(11),
+
+primary key(pub_id)
+);
+
 CREATE TABLE book(
 	isbn varchar(20),
 	subject varchar(11),
@@ -24,12 +31,7 @@ CREATE TABLE book(
 foreign key (pub_id) references publisher(pub_id)
 );
 
-CREATE TABLE publisher(
-	pub_id int,
-	pub_name varchar(11),
 
-primary key(pub_id)
-);
 
 CREATE TABLE order_basket (
 order_basket_id int,
@@ -53,7 +55,7 @@ CREATE TABLE listing (
 
 	Primary key(listing_id, user_id),
 	Foreign key(order_basket_id) references order_basket(order_basket_id),
-	Foreign Key(book_isbn) reference book(isbn),
+	Foreign Key(book_isbn) references book(isbn),
 	Foreign key(user_id) references user(user_id)
 );
 
