@@ -3,7 +3,7 @@ create user 'mysql_username'@'localhost' identified with mysql_native_password b
 grant all on eaterank_project.* to 'mysql_username'@'localhost';
 flush privileges;
 
-use web_database_project;
+use team_11;
 
 CREATE TABLE user (
     user_id int,
