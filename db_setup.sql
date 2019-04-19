@@ -3,7 +3,7 @@ create user 'mysql_username'@'localhost' identified with mysql_native_password b
 grant all on eaterank_project.* to 'mysql_username'@'localhost';
 flush privileges;
 
-use team_11;
+use web_database_project;
 
 CREATE TABLE user (
     user_id int,
@@ -11,13 +11,6 @@ CREATE TABLE user (
     userpassword varchar(11),
     
     primary key(user_id)
-);
-
-CREATE TABLE publisher(
-	pub_id int,
-	pub_name varchar(11),
-
-primary key(pub_id)
 );
 
 CREATE TABLE book(
@@ -31,7 +24,12 @@ CREATE TABLE book(
 foreign key (pub_id) references publisher(pub_id)
 );
 
+CREATE TABLE publisher(
+	pub_id int,
+	pub_name varchar(11),
 
+primary key(pub_id)
+);
 
 CREATE TABLE order_basket (
 order_basket_id int,
@@ -55,7 +53,7 @@ CREATE TABLE listing (
 
 	Primary key(listing_id, user_id),
 	Foreign key(order_basket_id) references order_basket(order_basket_id),
-	Foreign Key(book_isbn) references book(isbn),
+	Foreign Key(book_isbn) reference book(isbn),
 	Foreign key(user_id) references user(user_id)
 );
 
