@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Add Book{% endblock %}</h1>
+  <hr><hr>
+{% endblock %}
+
+{% block content %}
+  <h2>No book found with ISBN {{ isbn }}. Please add details on the book below: </h2> 
+  <form method="post">
+    <label for="title">Title</label>
+    <input name="title" id="title" value="{{ request.form['title'] }}" required>
+    <br>
+    <label for="subject">Subject</label>
+    <input name="subject" id="subject" value="{{ request.form['subject'] }}" required>
+    <br>
+    <label for="authors">Authors, seperated by commas</label>
+    <input name="authors" id="authors" value="{{ request.form['authors'] }}" required>
+    <br>
+    <label for="publisher">Publisher</label>
+    <input name="publisher" id="publisher" value="{{ request.form['publisher'] }}" required>
+    <br>
+    <label for="description">Description</label>
+    <textarea name="description" id="description" required>{{ request.form['description'] }}</textarea>
+    <br>
+    <input type="submit">
+  </form>
+{% endblock %}
