@@ -104,7 +104,10 @@ INSERT_AUTHORS = ("INSERT INTO authors"
 INSERT_PUBLISHER = ("INSERT INTO publisher "
 "VALUES(%s, %s)")
 
-
+#21 get number of listings for user
+GET_NUMPUBLISHERS = ("SELECT COUNT(DISTINCT pub_id)"
+"FROM publisher"
+"WHERE %s = pub_id")
 
 
 
