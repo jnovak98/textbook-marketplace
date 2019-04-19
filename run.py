@@ -102,6 +102,7 @@ def add_book(isbn):
         authors = request.form['authors'] #names seperated by commas. Might need to make new author if author with that name doesn't already exist
         publisher = request.form['publisher'] #might have to make new publisher if publisher with this name doesn't exist
         description = request.form['description']
+        insertBook(isbn, subject, title, description, 100)
         #add this new book to DB
         return redirect(url_for('book_listings', isbn=isbn))
 
