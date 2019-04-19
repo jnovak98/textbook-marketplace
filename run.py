@@ -33,17 +33,6 @@ def sql_execute(sql):
 # For this example you can select a handler function by
 # uncommenting one of the @app.route decorators.
 
-# Home page
-@app.route('/')
-@app.route('/home')
-@app.route('/index')
-def index():
-    return render_template('home.html')
-
-
-
-@app.route('/', methods=['GET', 'POST'])
-
 #@app.route('/')
 def basic_response():
     return "It works!" #example
@@ -60,7 +49,7 @@ def index():
 def search():
     if('query' in request.args and request.args.get('query')):
         search_query=request.args.get('query')
-        #these books should be every book in the DB that contains "search_query", 
+        #these books should be every book in the DB that contains "search_query",
         #either in the name or description, based on how much it shows up
         placeholder_books=[{'title': 'Book Search Result 1', 'subject': 'Math', 'description': 'This is a placeholder search result','isbn':123456, 'authors':[{'author_name': 'Author'}]},
         {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same','isbn':123123123 , 'authors':[{'author_name': 'Author'}]},
@@ -74,13 +63,13 @@ def search():
 def book_listings(isbn):
     if request.method == 'GET':
         #get book based on 'isbn'. Make sure this includes an array of all the authors
-        book_details={'title': 'Placeholder Book', 'subject': 'Math', 'description': 'This is a placeholder book listings page', 
+        book_details={'title': 'Placeholder Book', 'subject': 'Math', 'description': 'This is a placeholder book listings page',
             'isbn': isbn, 'authors':[{'author_name': 'Author 1'}, {'author_name': 'Author 2'}]}
         # listings of 'isbn' that are available. Make sure this includes the username of the user who made the listing
         listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'username': 'user1'},
         {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','username': 'user2'},
         {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','username': 'user3'}]
-        #User's unordered baskets 
+        #User's unordered baskets
         baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
         return render_template('book-listings.html', book=book_details, listings=listings, baskets=baskets)
     elif request.method == 'POST':
@@ -184,7 +173,6 @@ def getNumListings(isbn):
 #19
 def insertPublisher(pub_id, pub_name):
     return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
-
 #2
 def insertUser(user_id, username, password):
     return sql_query(INSERT_USER, user_id, username, password)
@@ -206,4 +194,3 @@ def sortLowestPrice(book_isbn):
 #20
 def insertPublisher(pub_id, pub_name):
     return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
-
