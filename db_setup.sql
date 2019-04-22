@@ -3,18 +3,28 @@ create user 'mysql_username'@'localhost' identified with mysql_native_password b
 grant all on eaterank_project.* to 'mysql_username'@'localhost';
 flush privileges;
 
+TO DO:
+CHANGE CONFIGURATION FILE
+CHANGE QUERIES.PY TO INCLUDE ONE LESS VARIABLE
+- USER
+- PUBLISHER
+- ORDER_BASKET
+- LISTING
+- AUTHOR
+- AUTHORS
+
 use team_11;
 
 CREATE TABLE user (
-    user_id int,
-    username varchar(11),
-    userpassword varchar(11),
+    user_id int NOT NULL AUTO_INCREMENT,
+    username varchar(11) NOT NULL,
+    userpassword varchar(11) NOT NULL,
     
     primary key(user_id)
 );
 
 CREATE TABLE publisher(
-	pub_id int,
+	pub_id int NOT NULL AUTO_INCREMENT,
 	pub_name varchar(11),
 
 primary key(pub_id)
@@ -34,7 +44,7 @@ foreign key (pub_id) references publisher(pub_id)
 
 
 CREATE TABLE order_basket (
-order_basket_id int,
+order_basket_id int NOT NULL AUTO_INCREMENT,
 user_id int,
 address varchar(32),
 date_made varchar(11),
@@ -45,7 +55,7 @@ Foreign key(user_id) references user(user_id)
 );
 
 CREATE TABLE listing (
-	listing_id int,
+	listing_id int NOT NULL AUTO_INCREMENT,
 	price varchar(11),
 	listing_status varchar(11),
 	listing_condition varchar(32),
@@ -60,14 +70,14 @@ CREATE TABLE listing (
 );
 
 CREATE TABLE author (
-	author_id int,
+	author_id int NOT NULL AUTO_INCREMENT,
 	author_name varchar(20),
 
 	primary key(author_id)
 );
 
 CREATE TABLE authors (
-	author_id int,
+	author_id int NOT NULL AUTO_INCREMENT,
 	isbn varchar(20),
 
 	primary key(author_id, isbn),
