@@ -14,7 +14,7 @@ app = Flask(__name__)
 # Create a function for fetching data from the database.
 def sql_query(sql, params = None):
     db = mysql.connector.connect(**config['mysql.connector'])
-    cursor = db.cursor()
+    cursor = db.cursor(prepared=True)
     cursor.execute(sql, params)
     result = cursor.fetchall()
     cursor.close()
@@ -24,7 +24,7 @@ def sql_query(sql, params = None):
 
 def sql_execute(sql, params):
     db = mysql.connector.connect(**config['mysql.connector'])
-    cursor = db.cursor()
+    cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
     db.commit()
     cursor.close()
@@ -102,7 +102,7 @@ def add_book(isbn):
         authors = request.form['authors'] #names seperated by commas. Might need to make new author if author with that name doesn't already exist
         publisher = request.form['publisher'] #might have to make new publisher if publisher with this name doesn't exist
         description = request.form['description']
-        sql_query(INSERT_BOOK, params=(isbn, subject, title, description, 100))
+        sql_execute(INSERT_BOOK, params=(isbn, subject, title, description, 100))
         #add this new book to DB
         return redirect(url_for('book_listings', isbn=isbn))
 

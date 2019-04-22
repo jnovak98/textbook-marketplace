@@ -15,7 +15,7 @@ INSERT_USER = ("INSERT INTO user "
 "VALUES(%s, %s, %s)")
 
 #3 Insert Book
-INSERT_BOOK = ("INSERT INTO book"
+INSERT_BOOK = ("INSERT INTO book(isbn, subject, title, description, pub_id)"
                 "VALUES(%s, %s, %s, %s, %s)")
 
 #4 get title by isbn
