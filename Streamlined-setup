@@ -23,7 +23,6 @@ CREATE TABLE order_basket (
 order_basket_id int NOT NULL AUTO_INCREMENT,
 user_id int,
 address varchar(32),
-date_made varchar(11),
 order_basket_status varchar(11), 
 
 Primary key(order_basket_id),
