@@ -41,7 +41,7 @@ def basic_response():
 def index():
     #we havent decided what these books should be, maybe books with most recently made listings?
     book= sql_query(GET_EVERY_BOOK)
-    title = book[0][2]
+    title = book[0][2].decode("utf-8") 
     placeholder_books=[{'title': title , 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'author':'Author'},
         {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'author':'Author'},
         {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'author':'Author'}]
