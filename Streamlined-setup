@@ -15,7 +15,7 @@ CREATE TABLE book(
  	author varchar(32),
 	description varchar(140),
 	
-	primary key(isbn),
+	primary key(isbn)
 );
 
 
