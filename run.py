@@ -45,6 +45,7 @@ def index():
     placeholder_books=[{'title': title , 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'author':'Author'},
         {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'author':'Author'},
         {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'author':'Author'}]
+
     return render_template('home.html', books=placeholder_books)
 
 @app.route('/search')
