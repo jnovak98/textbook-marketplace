@@ -40,7 +40,10 @@ def basic_response():
 @app.route('/')
 def index():
     #we havent decided what these books should be, maybe books with most recently made listings?
-    placeholder_books=[{'title': 'Featured Book Title 1', 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'authors':[{'author_name': 'Author'}]},
+    book= sql_query(GET_EVERY_BOOK,params=None)
+    title = book([0])[2]
+    subject = 
+    placeholder_books=[{'title': title , 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'authors':[{'author_name': 'Author'}]},
         {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'authors':[{'author_name': 'Author'}]},
         {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'authors':[{'author_name': 'Author'}]}]
     return render_template('home.html', books=placeholder_books)
