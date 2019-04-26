@@ -12,7 +12,7 @@ config.read('config.ini')
 app = Flask(__name__)
 
 # Create a function for fetching data from the database.
-def sql_query(sql, params):
+def sql_query(sql, **params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
@@ -22,7 +22,7 @@ def sql_query(sql, params):
     return result
 
 
-def sql_execute(sql, params):
+def sql_execute(sql, **params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
@@ -40,8 +40,8 @@ def basic_response():
 @app.route('/')
 def index():
     #we havent decided what these books should be, maybe books with most recently made listings?
-    book= sql_query(GET_EVERY_BOOK,params=None)
-    title = book([0])[2]
+    book= sql_query(GET_EVERY_BOOK)
+    title = book[0][2]
     placeholder_books=[{'title': title , 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'author':'Author'},
         {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'author':'Author'},
         {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'author':'Author'}]
