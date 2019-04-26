@@ -12,9 +12,9 @@ config.read('config.ini')
 app = Flask(__name__)
 
 # Create a function for fetching data from the database.
-def sql_query(sql, params = None):
+def sql_query(sql, params):
     db = mysql.connector.connect(**config['mysql.connector'])
-    cursor = db.cursor(prepared=True)
+    cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
     result = cursor.fetchall()
     cursor.close()
@@ -87,7 +87,14 @@ def make_listing():
         price = request.form['price']
         listing_condition = request.form['listing_condition']
         #add this listing to DB (get user from g.user['id'])
-        if False: #this should check if a book with ISBN 'isbn' already exists
+
+        exists = False;
+        bookCount = sql_query(GET_NUMISBN, params=(isbn))
+        if bookCount[0] > 0:
+            exists = true
+
+
+        if exists: #this should check if a book with ISBN 'isbn' already exists
             return redirect(url_for('book_listings', isbn=isbn))
         else:
             return redirect(url_for('add_book', isbn=isbn))
@@ -102,7 +109,8 @@ def add_book(isbn):
         authors = request.form['authors'] #names seperated by commas. Might need to make new author if author with that name doesn't already exist
         publisher = request.form['publisher'] #might have to make new publisher if publisher with this name doesn't exist
         description = request.form['description']
-        sql_execute(INSERT_BOOK, params=(isbn, subject, title, description, 100))
+
+        sql_execute(INSERT_BOOK, params=(isbn, subject, title, publisher, authors, description))
         #add this new book to DB
         return redirect(url_for('book_listings', isbn=isbn))
 
