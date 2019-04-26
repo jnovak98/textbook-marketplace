@@ -42,10 +42,9 @@ def index():
     #we havent decided what these books should be, maybe books with most recently made listings?
     book= sql_query(GET_EVERY_BOOK,params=None)
     title = book([0])[2]
-    subject = 
-    placeholder_books=[{'title': title , 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'authors':[{'author_name': 'Author'}]},
-        {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'authors':[{'author_name': 'Author'}]},
-        {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'authors':[{'author_name': 'Author'}]}]
+    placeholder_books=[{'title': title , 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'author':'Author'},
+        {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'author':'Author'},
+        {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'author':'Author'}]
     return render_template('home.html', books=placeholder_books)
 
 @app.route('/search')
@@ -54,10 +53,10 @@ def search():
         search_query=request.args.get('query')
         #these books should be every book in the DB that contains "search_query",
         #either in the name or description, based on how much it shows up
-        placeholder_books=[{'title': 'Book Search Result 1', 'subject': 'Math', 'description': 'This is a placeholder search result','isbn':123456, 'authors':[{'author_name': 'Author'}]},
-        {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same','isbn':123123123 , 'authors':[{'author_name': 'Author'}]},
-        {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet','isbn':789789789, 'authors':[{'author_name': 'Author'}]},
-        {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description','isbn':456456456, 'authors':[{'author_name': 'Author'}]}]
+        placeholder_books=[{'title': 'Book Search Result 1', 'subject': 'Math', 'description': 'This is a placeholder search result','isbn':123456, 'author':'Author'},
+        {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same','isbn':123123123 , 'author':'Author'},
+        {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet','isbn':789789789, 'author':'Author'},
+        {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description','isbn':456456456, 'author':'Author'}]
         return render_template('search.html', books=placeholder_books, query=search_query)
     else:
         return redirect(url_for('index'))
@@ -67,9 +66,9 @@ def book_listings(isbn):
     if request.method == 'GET':
         #get book based on 'isbn'. Make sure this includes an array of all the authors
         book_details={'title': 'Placeholder Book', 'subject': 'Math', 'description': 'This is a placeholder book listings page',
-            'isbn': isbn, 'authors':[{'author_name': 'Author 1'}, {'author_name': 'Author 2'}]}
+            'isbn': isbn, 'author':'Author'}
         # listings of 'isbn' that are available. Make sure this includes the username of the user who made the listing
-        listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'username': 'user1'},
+        listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'Noneew', 'username': 'user1'},
         {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','username': 'user2'},
         {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','username': 'user3'}]
         #User's unordered baskets
@@ -109,11 +108,11 @@ def add_book(isbn):
     elif request.method == 'POST':
         subject = request.form['subject']
         title = request.form['title']
-        authors = request.form['authors'] #names seperated by commas. Might need to make new author if author with that name doesn't already exist
-        publisher = request.form['publisher'] #might have to make new publisher if publisher with this name doesn't exist
+        author = request.form['authors']
+        publisher = request.form['publisher'] 
         description = request.form['description']
 
-        sql_execute(INSERT_BOOK, params=(isbn, subject, title, publisher, authors, description))
+        sql_execute(INSERT_BOOK, params=(isbn, subject, title, publisher, author, description))
         #add this new book to DB
         return redirect(url_for('book_listings', isbn=isbn))
 
