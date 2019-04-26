@@ -10,13 +10,13 @@ GET_TITLE_ISBN = ("SELECT book.title"
 "FROM book "
 "WHERE book.ISBN = %s")
 
-#2 (user_id, username, password)
+#2 (username, password)
 INSERT_USER = ("INSERT INTO user "
-"VALUES(%s, %s, %s)")
+"VALUES( %s, %s)")
 
 #3 Insert Book
-INSERT_BOOK = ("INSERT INTO book(isbn, subject, title, description, pub_id)"
-                "VALUES(%s, %s, %s, %s, %s)")
+INSERT_BOOK = ("INSERT INTO book(isbn, subject, title, publisher, author, description)"
+                "VALUES(%s, %s, %s, %s, %s, %s)")
 
 #4 get title by isbn
 GET_NUMISBN = ("COUNT(DISTINCT ISBN)"
@@ -39,11 +39,11 @@ INSERT_AUTHOR = ("INSERT INTO author "
 
 #8 (listing_id, user.user_id, order_basket_id, IBSN, price, listing_status, listing_condition)
 INSERT_LISTING =  ("INSERT INTO listing "
-"VALUES(%s, %s, %s, %s, %s, %s, %s)")
+"VALUES(%s, %s, %s, %s, %s, %s)")
 
 #9 Insert Order Basket
 INSERT_ORDER_BASKET = ("INSERT INTO order_basket"
-                       "VALUES(%s, %s, %s, %s, %s")
+                       "VALUES(%s, %s, %s, %s")
 
 #10 matches user id to basket id(user_id)
 MATCH_USER_ORDER_BASKET = ("SELECT order_basket_id"
