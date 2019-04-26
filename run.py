@@ -89,12 +89,12 @@ def make_listing():
         #add this listing to DB (get user from g.user['id'])
 
         exists = False;
-        bookCount = sql_query(GET_NUMISBN, params=(isbn))
-        if bookCount[0] > 0:
-            exists = true
+        bookCount = sql_query(GET_NUMISBN, params=(isbn, ))
+        if (bookCount[0])[0] > 0:
+            exists = True
 
-
-        if exists: #this should check if a book with ISBN 'isbn' already exists
+        # this should check if a book with ISBN 'isbn' already exists
+        if exists == True:
             return redirect(url_for('book_listings', isbn=isbn))
         else:
             return redirect(url_for('add_book', isbn=isbn))
