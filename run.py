@@ -92,10 +92,13 @@ def book_listings(isbn):
         #User's unordered baskets
         baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
         return render_template('book-listings.html', book=book_details, listings=listings, baskets=baskets)
+
     elif request.method == 'POST':
         listing_id = request.form['listing_id']
         order_basket_id = request.form['order_basket_id']
+        
         #add listing_id to order_basket with id=order_basket_id
+        sql_execute(UPDATE_LISTING, params=(order_basket_id,"SOLD",listing_id))
         return redirect(url_for('account'))
 
 @app.route('/make-listing', methods=('GET', 'POST'))
