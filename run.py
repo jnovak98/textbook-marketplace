@@ -40,11 +40,28 @@ def basic_response():
 @app.route('/')
 def index():
     #we havent decided what these books should be, maybe books with most recently made listings?
-    book= sql_query(GET_EVERY_BOOK)
-    title = book[0][2].decode("utf-8") 
-    placeholder_books=[{'title': title , 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'author':'Author'},
-        {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'author':'Author'},
-        {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'author':'Author'}]
+    book = sql_query(GET_EVERY_BOOK)
+    title1 = book[0][2].decode("utf-8") 
+    subject1 = book[0][1].decode("utf-8")
+    description1 = book[0][5].decode("utf-8")
+    isbn1 =book[0][0].decode("utf-8")
+    author1 = book[0][4].decode("utf-8")
+
+    title2 = book[1][2].decode("utf-8") 
+    subject2 = book[1][1].decode("utf-8")
+    description2 = book[1][5].decode("utf-8")
+    isbn2 =book[1][0].decode("utf-8")
+    author2 = book[1][4].decode("utf-8")
+
+    title2 = book[2][2].decode("utf-8") 
+    subject2 = book[2][1].decode("utf-8")
+    description2 = book[2][5].decode("utf-8")
+    isbn2 =book[2][0].decode("utf-8")
+    author2 = book[2][4].decode("utf-8")
+
+    placeholder_books=[{'title': title1 , 'subject': subject1, 'description': description1,'isbn':isbn1, 'author':author1},
+        {'title': title2 , 'subject': subject2, 'description': description2,'isbn':isbn2, 'author':author2},
+        {'title': title3 , 'subject': subject3, 'description': description3,'isbn':isbn3, 'author':author3}]
 
     return render_template('home.html', books=placeholder_books)
 
