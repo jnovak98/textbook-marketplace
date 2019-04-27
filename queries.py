@@ -36,8 +36,8 @@ INSERT_AUTHOR = ("INSERT INTO author "
 "VALUES(%s, %s)")
 
 #8 (listing_id, user.user_id, order_basket_id, IBSN, price, listing_status, listing_condition)
-INSERT_LISTING =  ("INSERT INTO listing(price, listing_status, listing_condition, user_id, order_basket_id, book_isbn)"
-"VALUES(%s, %s, %s, %s, %s, %s)")
+INSERT_LISTING =  ("INSERT INTO listing(price, listing_status, listing_condition, user_id, book_isbn)"
+"VALUES(%s, %s, %s, %s, %s)")
 
 #9 Insert Order Basket
 INSERT_ORDER_BASKET = ("INSERT INTO order_basket(user_id, address, order_basket_status)"
@@ -85,7 +85,7 @@ INSERT_AUTHORS = ("INSERT INTO authors VALUES(%s, %s)")
 #21 get number of listings for user
 GET_NUMPUBLISHERS = ("SELECT COUNT(DISTINCT pub_id) FROM publisher WHERE %s = pub_id")
 
-
+GET_LISTING_BOOK_ISBN = ("SELECT book.title, listing.price, listing.listing_condition FROM book, listing WHERE book.title = %s AND book.isbn = listing.book_isbn AND listing.listing_status = 'selling'")
 
 
 
