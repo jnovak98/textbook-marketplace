@@ -30,6 +30,14 @@ def sql_execute(sql, **params):
     cursor.close()
     db.close()
 
+def sql_execute_many(sql, **params):
+    db = mysql.connector.connect(**config['mysql.connector'])
+    cursor = db.cursor(prepared = True)
+    cursor.executemany(sql, params)
+    db.commit()
+    cursor.close()
+    db.close()
+
 # For this example you can select a handler function by
 # uncommenting one of the @app.route decorators.
 
@@ -53,11 +61,11 @@ def index():
     isbn2 =book[1][0].decode("utf-8")
     author2 = book[1][4].decode("utf-8")
 
-    title2 = book[2][2].decode("utf-8") 
-    subject2 = book[2][1].decode("utf-8")
-    description2 = book[2][5].decode("utf-8")
-    isbn2 =book[2][0].decode("utf-8")
-    author2 = book[2][4].decode("utf-8")
+    title3 = book[2][2].decode("utf-8") 
+    subject3 = book[2][1].decode("utf-8")
+    description3 = book[2][5].decode("utf-8")
+    isbn3 =book[2][0].decode("utf-8")
+    author3 = book[2][4].decode("utf-8")
 
     placeholder_books=[{'title': title1 , 'subject': subject1, 'description': description1,'isbn':isbn1, 'author':author1},
         {'title': title2 , 'subject': subject2, 'description': description2,'isbn':isbn2, 'author':author2},
@@ -94,11 +102,12 @@ def book_listings(isbn):
         return render_template('book-listings.html', book=book_details, listings=listings, baskets=baskets)
 
     elif request.method == 'POST':
-        listing_id = request.form['listing_id']
-        order_basket_id = request.form['order_basket_id']
-        
+        l_id = request.form['listing_id']
+        ob_id = request.form['order_basket_id']
+        status = 'SOLD'
         #add listing_id to order_basket with id=order_basket_id
-        sql_execute(UPDATE_LISTING, params=(order_basket_id,"SOLD",listing_id))
+        vals = (ob_id,status,l_id)
+        sql_execute(UPDATE_LISTING, params = (ob_id,status,l_id))
         return redirect(url_for('account'))
 
 @app.route('/make-listing', methods=('GET', 'POST'))
