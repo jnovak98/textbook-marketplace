@@ -75,17 +75,35 @@ def index():
 
 @app.route('/search')
 def search():
-    if('query' in request.args and request.args.get('query')):
-        search_query=request.args.get('query')
-        #these books should be every book in the DB that contains "search_query",
-        #either in the name or description, based on how much it shows up
-        placeholder_books=[{'title': 'Book Search Result 1', 'subject': 'Math', 'description': 'This is a placeholder search result','isbn':123456, 'author':'Author'},
-        {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same','isbn':123123123 , 'author':'Author'},
-        {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet','isbn':789789789, 'author':'Author'},
-        {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description','isbn':456456456, 'author':'Author'}]
+
+    if ('query' in request.args and request.args.get('query')):
+        search_query = request.args.get('query')
+        # these books should be every book in the DB that contains "search_query",
+        # either in the name or description, based on how much it shows up
+
+        listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(search_query, ))
+        listing_books = []
+        sample_book = {}
+        for x in listing_search:
+            sample_book["book"] = x[0]
+            sample_book["listing_price"] = x[1]
+            sample_book["listing_condition"] = x[2]
+            listing_books.append(sample_book)
+
+        placeholder_books = [
+            {'title': listing_books[0][0], 'subject': listing_books[0][1], 'description': listing_books[0][2],
+             'isbn': 123456, 'authors': [{'author_name': 'Author'}]},
+            {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same', 'isbn': 123123123,
+             'authors': [{'author_name': 'Author'}]},
+            {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet', 'isbn': 789789789,
+             'authors': [{'author_name': 'Author'}]},
+            {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description', 'isbn': 456456456,
+             'authors': [{'author_name': 'Author'}]}]
+
         return render_template('search.html', books=placeholder_books, query=search_query)
     else:
         return redirect(url_for('index'))
+
 
 @app.route('/book-listings/<int:isbn>', methods=('GET', 'POST'))
 def book_listings(isbn):
@@ -120,6 +138,7 @@ def make_listing():
         listing_condition = request.form['listing_condition']
         #add this listing to DB (get user from g.user['id'])
 
+
         exists = False;
         bookCount = sql_query(GET_NUMISBN, params=(isbn, ))
         if (bookCount[0])[0] > 0:
@@ -127,14 +146,16 @@ def make_listing():
 
         # this should check if a book with ISBN 'isbn' already exists
         if exists == True:
+            # 1 is the hardcoded user_id
+            sql_execute(INSERT_LISTING, params=(price, 'selling', listing_condition, 1, isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
-            return redirect(url_for('add_book', isbn=isbn))
+            return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
 
-@app.route('/add-book/<int:isbn>', methods=('GET', 'POST'))
-def add_book(isbn):
+@app.route('/add-book/<isbn>/<price>/<listing_condition>', methods=('GET', 'POST'))
+def add_book(isbn, price, listing_condition):
     if request.method == 'GET':
-        return render_template('add-book.html', isbn=isbn)
+        return render_template('add-book.html', isbn=isbn, price=price, listing_condition=listing_condition)
     elif request.method == 'POST':
         subject = request.form['subject']
         title = request.form['title']
@@ -144,6 +165,10 @@ def add_book(isbn):
 
         sql_execute(INSERT_BOOK, params=(isbn, subject, title, publisher, author, description))
         #add this new book to DB
+
+        #insert listing
+        sql_execute(INSERT_LISTING, params=(price, 'selling', listing_condition, 1, isbn))
+
         return redirect(url_for('book_listings', isbn=isbn))
 
 @app.route('/new-order', methods=('GET', 'POST'))
