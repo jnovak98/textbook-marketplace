@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 # Create a function for fetching data from the database.
-def sql_query(sql, **params):
+def sql_query(sql, params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
@@ -25,10 +25,18 @@ def sql_query(sql, **params):
     return result
 
 
-def sql_execute(sql, **params):
+def sql_execute(sql, params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
+    db.commit()
+    cursor.close()
+    db.close()
+
+def sql_execute_many(sql, params):
+    db = mysql.connector.connect(**config['mysql.connector'])
+    cursor = db.cursor(prepared = True)
+    cursor.executemany(sql, params)
     db.commit()
     cursor.close()
     db.close()
@@ -52,27 +60,62 @@ def login_required(view):
 @login_required
 def index():
     #we havent decided what these books should be, maybe books with most recently made listings?
-    book= sql_query(GET_EVERY_BOOK)
-    title = book[0][2].decode("utf-8") 
-    placeholder_books=[{'title': title , 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'author':'Author'},
-        {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'author':'Author'},
-        {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'author':'Author'}]
+    book = sql_query(GET_EVERY_BOOK, params = ())
+    title1 = book[0][2].decode("utf-8") 
+    subject1 = book[0][1].decode("utf-8")
+    description1 = book[0][5].decode("utf-8")
+    isbn1 =book[0][0].decode("utf-8")
+    author1 = book[0][4].decode("utf-8")
+
+    title2 = book[1][2].decode("utf-8") 
+    subject2 = book[1][1].decode("utf-8")
+    description2 = book[1][5].decode("utf-8")
+    isbn2 =book[1][0].decode("utf-8")
+    author2 = book[1][4].decode("utf-8")
+
+    title3 = book[2][2].decode("utf-8") 
+    subject3 = book[2][1].decode("utf-8")
+    description3 = book[2][5].decode("utf-8")
+    isbn3 =book[2][0].decode("utf-8")
+    author3 = book[2][4].decode("utf-8")
+
+    placeholder_books=[{'title': title1 , 'subject': subject1, 'description': description1,'isbn':isbn1, 'author':author1},
+        {'title': title2 , 'subject': subject2, 'description': description2,'isbn':isbn2, 'author':author2},
+        {'title': title3 , 'subject': subject3, 'description': description3,'isbn':isbn3, 'author':author3}]
 
     return render_template('home.html', books=placeholder_books)
 
 @app.route('/search')
 def search():
-    if('query' in request.args and request.args.get('query')):
-        search_query=request.args.get('query')
-        #these books should be every book in the DB that contains "search_query",
-        #either in the name or description, based on how much it shows up
-        placeholder_books=[{'title': 'Book Search Result 1', 'subject': 'Math', 'description': 'This is a placeholder search result','isbn':123456, 'author':'Author'},
-        {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same','isbn':123123123 , 'author':'Author'},
-        {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet','isbn':789789789, 'author':'Author'},
-        {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description','isbn':456456456, 'author':'Author'}]
+
+    if ('query' in request.args and request.args.get('query')):
+        search_query = request.args.get('query')
+        # these books should be every book in the DB that contains "search_query",
+        # either in the name or description, based on how much it shows up
+
+        listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(search_query, ))
+        listing_books = []
+        sample_book = {}
+        for x in listing_search:
+            sample_book["book"] = x[0]
+            sample_book["listing_price"] = x[1]
+            sample_book["listing_condition"] = x[2]
+            listing_books.append(sample_book)
+
+        placeholder_books = [
+            {'title': listing_books[0][0], 'subject': listing_books[0][1], 'description': listing_books[0][2],
+             'isbn': 123456, 'authors': [{'author_name': 'Author'}]},
+            {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same', 'isbn': 123123123,
+             'authors': [{'author_name': 'Author'}]},
+            {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet', 'isbn': 789789789,
+             'authors': [{'author_name': 'Author'}]},
+            {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description', 'isbn': 456456456,
+             'authors': [{'author_name': 'Author'}]}]
+
         return render_template('search.html', books=placeholder_books, query=search_query)
     else:
         return redirect(url_for('index'))
+
 
 @app.route('/book-listings/<int:isbn>', methods=('GET', 'POST'))
 def book_listings(isbn):
@@ -87,10 +130,14 @@ def book_listings(isbn):
         #User's unordered baskets
         baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
         return render_template('book-listings.html', book=book_details, listings=listings, baskets=baskets)
+
     elif request.method == 'POST':
-        listing_id = request.form['listing_id']
-        order_basket_id = request.form['order_basket_id']
+        l_id = request.form['listing_id']
+        ob_id = request.form['order_basket_id']
+        status = 'SOLD'
         #add listing_id to order_basket with id=order_basket_id
+        vals = (ob_id,status,l_id)
+        sql_execute(UPDATE_LISTING, params=(ob_id,status,l_id))
         return redirect(url_for('account'))
 
 @app.route('/make-listing', methods=('GET', 'POST'))
@@ -103,30 +150,38 @@ def make_listing():
         listing_condition = request.form['listing_condition']
         #add this listing to DB (get user from g.user['id'])
 
+
         exists = False;
-        bookCount = sql_query(GET_NUMISBN, params=(isbn, ))
+        bookCount = sql_query(GET_NUMISBN, params = (isbn, ))
         if (bookCount[0])[0] > 0:
             exists = True
 
         # this should check if a book with ISBN 'isbn' already exists
         if exists == True:
+            # 1 is the hardcoded user_id
+            sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, 1, isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
-            return redirect(url_for('add_book', isbn=isbn))
+            return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
 
-@app.route('/add-book/<int:isbn>', methods=('GET', 'POST'))
-def add_book(isbn):
+@app.route('/add-book/<isbn>/<price>/<listing_condition>', methods=('GET', 'POST'))
+def add_book(isbn, price, listing_condition):
     if request.method == 'GET':
-        return render_template('add-book.html', isbn=isbn)
+        return render_template('add-book.html', isbn=isbn, price=price, listing_condition=listing_condition)
     elif request.method == 'POST':
         subject = request.form['subject']
         title = request.form['title']
         author = request.form['authors']
         publisher = request.form['publisher'] 
         description = request.form['description']
+        vals = (isbn, subject, title, publisher, author, description)
 
-        sql_execute(INSERT_BOOK, params=(isbn, subject, title, publisher, author, description))
+        sql_execute(INSERT_BOOK, params = vals)
         #add this new book to DB
+
+        #insert listing
+        sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, 1, isbn))
+
         return redirect(url_for('book_listings', isbn=isbn))
 
 @app.route('/new-order', methods=('GET', 'POST'))
