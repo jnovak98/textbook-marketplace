@@ -48,7 +48,7 @@ def basic_response():
 @app.route('/')
 def index():
     #we havent decided what these books should be, maybe books with most recently made listings?
-    book = sql_query(GET_EVERY_BOOK, (""))
+    book = sql_query(GET_EVERY_BOOK, params = ())
     title1 = book[0][2].decode("utf-8") 
     subject1 = book[0][1].decode("utf-8")
     description1 = book[0][5].decode("utf-8")
@@ -140,7 +140,7 @@ def make_listing():
 
 
         exists = False;
-        bookCount = sql_query(GET_NUMISBN, params = (isbn))
+        bookCount = sql_query(GET_NUMISBN, params = (isbn, ))
         if (bookCount[0])[0] > 0:
             exists = True
 

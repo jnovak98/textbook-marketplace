@@ -6,7 +6,7 @@ GET_ISBN_TITLE = ("SELECT book.ISBN FROM book WHERE book.title = %s")
 #1.A
 GET_BOOK_ISBN = ("SELECT * FROM book WHERE book.ISBN = %s ORDER BY isbn")
 
-GET_EVERY_BOOK = ("SELECT* FROM book%s")
+GET_EVERY_BOOK = ("SELECT* FROM book;")
 #1.B
 GET_TITLE_ISBN = ("SELECT book.title FROM book WHERE book.ISBN = %s")
 
