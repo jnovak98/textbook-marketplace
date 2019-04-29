@@ -12,7 +12,7 @@ config.read('config.ini')
 app = Flask(__name__)
 
 # Create a function for fetching data from the database.
-def sql_query(sql, **params):
+def sql_query(sql, *params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
@@ -22,7 +22,7 @@ def sql_query(sql, **params):
     return result
 
 
-def sql_execute(sql, **params):
+def sql_execute(sql, *params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
@@ -30,7 +30,7 @@ def sql_execute(sql, **params):
     cursor.close()
     db.close()
 
-def sql_execute_many(sql, **params):
+def sql_execute_many(sql, params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
     cursor.executemany(sql, params)
@@ -140,14 +140,14 @@ def make_listing():
 
 
         exists = False;
-        bookCount = sql_query(GET_NUMISBN, params=(isbn, ))
+        bookCount = sql_query(GET_NUMISBN, (isbn))
         if (bookCount[0])[0] > 0:
             exists = True
 
         # this should check if a book with ISBN 'isbn' already exists
         if exists == True:
             # 1 is the hardcoded user_id
-            sql_execute(INSERT_LISTING, params=(price, 'selling', listing_condition, 1, isbn))
+            sql_execute(INSERT_LISTING, (price, 'selling', listing_condition, 1, isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
             return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
@@ -162,12 +162,13 @@ def add_book(isbn, price, listing_condition):
         author = request.form['authors']
         publisher = request.form['publisher'] 
         description = request.form['description']
+        vals = (isbn, subject, title, publisher, author, description)
 
-        sql_execute(INSERT_BOOK, params=(isbn, subject, title, publisher, author, description))
+        sql_execute(INSERT_BOOK, vals)
         #add this new book to DB
 
         #insert listing
-        sql_execute(INSERT_LISTING, params=(price, 'selling', listing_condition, 1, isbn))
+        sql_execute(INSERT_LISTING, (price, 'selling', listing_condition, 1, isbn))
 
         return redirect(url_for('book_listings', isbn=isbn))
 
