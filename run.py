@@ -52,25 +52,27 @@ def search():
         # these books should be every book in the DB that contains "search_query",
         # either in the name or description, based on how much it shows up
 
-        listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(search_query, ))
-        listing_books = []
+        book_search = sql_query(GET_BOOK_TITLE, params=(search_query, ))
+        listofbooks = []
         sample_book = {}
-        for x in listing_search:
-            sample_book["book"] = x[0]
-            sample_book["listing_price"] = x[1]
-            sample_book["listing_condition"] = x[2]
-            listing_books.append(sample_book)
+        for x in book_search:
+            sample_book["title"] = x[0].decode("utf-8")
+            sample_book["subject"] = x[1].decode("utf-8")
+            sample_book["description"] = x[2].decode("utf-8")
+            sample_book["isbn"] = x[3].decode("utf-8")
+            sample_book["author"] = x[4].decode("utf-8")
+            listofbooks.append(sample_book)
 
-        placeholder_books = [
-            {'title': listing_books[0][0], 'subject': listing_books[0][1], 'description': listing_books[0][2],
-             'isbn': 123456, 'authors': [{'author_name': 'Author'}]},
-            {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same', 'isbn': 123123123,
-             'authors': [{'author_name': 'Author'}]},
-            {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet', 'isbn': 789789789,
-             'authors': [{'author_name': 'Author'}]},
-            {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description', 'isbn': 456456456,
-             'authors': [{'author_name': 'Author'}]}]
-        return render_template('search.html', books=placeholder_books, query=search_query)
+        # placeholder_books = [
+        #     {'title': listing_books[0][0], 'subject': listing_books[0][1], 'description': listing_books[0][2],
+        #      'isbn': 123456, 'authors': [{'author_name': 'Author'}]},
+        #     {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same', 'isbn': 123123123,
+        #      'authors': [{'author_name': 'Author'}]},
+        #     {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet', 'isbn': 789789789,
+        #      'authors': [{'author_name': 'Author'}]},
+        #     {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description', 'isbn': 456456456,
+        #      'authors': [{'author_name': 'Author'}]}]
+        return render_template('search.html', books=listofbooks, query=search_query)
     else:
         return redirect(url_for('index'))
 
