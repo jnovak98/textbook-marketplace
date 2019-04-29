@@ -81,15 +81,28 @@ def search():
 def book_listings(isbn):
     if request.method == 'GET':
         #get book based on 'isbn'. Make sure this includes an array of all the authors
+
+
         book_details={'title': 'Placeholder Book', 'subject': 'Math', 'description': 'This is a placeholder book listings page',
             'isbn': isbn, 'authors':[{'author_name': 'Author 1'}, {'author_name': 'Author 2'}]}
         # listings of 'isbn' that are available. Make sure this includes the username of the user who made the listing
+
+        listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(isbn,))
+        listoflistings = []
+        sample_listing = {}
+        for x in listing_search:
+            sample_book["listing_id"] = x[0].decode("utf-8")
+            sample_book["price"] = x[1].decode("utf-8")
+            sample_book["listing_condition"] = x[2].decode("utf-8")
+            sample_book["username"] = x[3].decode("utf-8")
+            listoflistings.append(sample_listing)
+
         listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'username': 'user1'},
         {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','username': 'user2'},
         {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','username': 'user3'}]
         #User's unordered baskets
         baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
-        return render_template('book-listings.html', book=book_details, listings=listings, baskets=baskets)
+        return render_template('book-listings.html', book=book_details, listings=listoflistings, baskets=baskets)
     elif request.method == 'POST':
         listing_id = request.form['listing_id']
         order_basket_id = request.form['order_basket_id']

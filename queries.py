@@ -83,7 +83,7 @@ INSERT_AUTHORS = ("INSERT INTO authors VALUES(%s, %s)")
 #21 get number of listings for user
 GET_NUMPUBLISHERS = ("SELECT COUNT(DISTINCT pub_id) FROM publisher WHERE %s = pub_id")
 
-GET_LISTING_BOOK_ISBN = ("SELECT book.title, listing.price, listing.listing_condition FROM book, listing WHERE book.title = %s AND book.isbn = listing.book_isbn AND listing.listing_status = 'selling'")
+GET_LISTING_BOOK_ISBN = ("SELECT listing.listing_id, listing.price, listing.listing_condition, listing.user_id FROM book, listing WHERE book.isbn = %s AND book.isbn = listing.book_isbn AND listing.listing_status = 'selling'")
 
 GET_BOOK_TITLE = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.title = %s")
 
