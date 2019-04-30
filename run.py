@@ -81,9 +81,12 @@ def search():
 def book_listings(isbn):
     if request.method == 'GET':
         #get book based on 'isbn'. Make sure this includes an array of all the authors
+        book_result = sql_query(GET_BOOK_ISBN, params=(isbn,))
+        title = book_result[0][0].decode("utf-8")
+        subject = book_result[0][1].decode("utf-8")
+        description = book_result[0][2].decode("utf-8")
 
-
-        book_details={'title': 'Placeholder Book', 'subject': 'Math', 'description': 'This is a placeholder book listings page',
+        book_details={'title': title, 'subject': subject, 'description': description,
             'isbn': isbn, 'authors':[{'author_name': 'Author 1'}, {'author_name': 'Author 2'}]}
         # listings of 'isbn' that are available. Make sure this includes the username of the user who made the listing
 
@@ -91,10 +94,10 @@ def book_listings(isbn):
         listoflistings = []
         sample_listing = {}
         for x in listing_search:
-            sample_book["listing_id"] = x[0].decode("utf-8")
-            sample_book["price"] = x[1].decode("utf-8")
-            sample_book["listing_condition"] = x[2].decode("utf-8")
-            sample_book["username"] = x[3].decode("utf-8")
+            sample_listing["listing_id"] = x[0]
+            sample_listing["price"] = x[1].decode("utf-8")
+            sample_listing["listing_condition"] = x[2].decode("utf-8")
+            sample_listing["username"] = x[3]
             listoflistings.append(sample_listing)
 
         listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'username': 'user1'},
