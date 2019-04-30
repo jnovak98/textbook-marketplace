@@ -251,7 +251,7 @@ def account():
             sample_listing_order_basket["listing_id"] = y[0]
             sample_listing_order_basket["price"] = y[1].decode("utf-8")
             sample_listing_order_basket["listing_condition"] = y[2].decode("utf-8")
-            sample_listing_order_basket["username"] = y[3].decode("utf-8")
+            sample_listing_order_basket["username"] = y[3]
             title = sql_query(GET_TITLE_ISBN, params= (y[4], ))
             sample_listing_order_basket["title"] = title[0].decode("utf-8")
             sample_order_basket.append(sample_listing_order_basket)
