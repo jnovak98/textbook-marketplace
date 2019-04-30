@@ -200,7 +200,7 @@ def add_book(isbn, price, listing_condition):
         #add this new book to DB
 
         #insert listing
-        sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, 1, isbn))
+        sql_execute(INSERT_LISTING, params=(price, 'SELLING', listing_condition, 1, isbn))
 
         return redirect(url_for('book_listings', isbn=isbn))
 
@@ -211,6 +211,8 @@ def new_order():
     elif request.method == 'POST':
         address = request.form['address']
         #add new order basket for user at given address
+        sql_execute(INSERT_ORDER_BASKET, params=(1, address, 'OPEN'))
+
         return redirect(url_for('account'))
 
 @app.route('/account')
