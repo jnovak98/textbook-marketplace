@@ -37,7 +37,7 @@ INSERT_PUBLISHER = ("INSERT INTO publisher "
 INSERT_AUTHOR = ("INSERT INTO author "
 "VALUES(%s, %s)")
 
-#8 (listing_id, user.user_id, order_basket_id, IBSN, price, listing_status, listing_condition)
+#8 (listing_id, user.user_id, order_basket_id, IBSN, price, listing_status, listing_condition); listing status is all caps
 INSERT_LISTING =  ("INSERT INTO listing(price, listing_status, listing_condition, user_id, book_isbn)"
 "VALUES(%s, %s, %s, %s, %s)")
 
