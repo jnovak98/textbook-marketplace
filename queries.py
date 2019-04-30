@@ -10,10 +10,12 @@ GET_EVERY_BOOK = ("SELECT* FROM book;")
 #1.B
 GET_TITLE_ISBN = ("SELECT book.title FROM book WHERE book.ISBN = %s")
 
-#2 (username, password)
+#2.A (username, password)
 INSERT_USER = ("INSERT INTO user (username, userpassword)"
 "VALUES( %s, %s)")
 
+#2.B (username)
+RETURN_USER = ("SELECT * FROM user WHERE username=%s")
 #3 Insert Book
 INSERT_BOOK = ("INSERT INTO book(isbn, subject, title, publisher, author, description)"
                 "VALUES(%s, %s, %s, %s, %s, %s)")

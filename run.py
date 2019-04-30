@@ -252,15 +252,17 @@ def register():
         password = request.form['password']
         error = None
 
+        existing_user = sql_query(RETURN_USER, params=(username, ))
+
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif False:
+        elif existing_user:
             #This should check if a user with that name already exists
             error = 'User {} is already registered.'.format(username)
         if error is None:
-            #add username to database with password of 'generate_password_hash(password)'
+            sql_execute(INSERT_USER, params=(username, password))
             return redirect(url_for('login'))
 
         flash(error)
