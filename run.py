@@ -213,9 +213,16 @@ def new_order():
 
         return redirect(url_for('account'))
 
-@app.route('/account')
+@app.route('/account', methods=('GET', 'POST'))
 @login_required
 def account():
+    if request.method == 'POST':
+        basket_id=request.form['order_basket_id']
+        sql_execute(BUY_ORDER_BASKET,params=(basket_id, ))
+        listings = sql_query(GET_LISTING_ORDER_BASKET_ID, params=(basket_id, ))
+        for listing in listings:
+            sql_execute(BUY_LISTING,params=(listing[0], ))
+        return redirect(url_for('account'))
 
     user_details = {'username':g.user['id']}
 
@@ -255,9 +262,9 @@ def account():
             title = sql_query(GET_TITLE_ISBN, params= (y[4].decode("utf-8"), ))
             sample_listing_order_basket["title"] = title[0][0].decode("utf-8")
             sample_order_basket["listings"].append(sample_listing_order_basket)
- 
         order_baskets.append(sample_order_basket)
 
+    unordered_baskets = sql_query(MATCH_USER_ORDER_BASKET_UNORDERED, params=(g.user['id'], ))
     #order_baskets = [{'order_basket_id': 12345, 'address': '1234 Road Rd.','order_basket_status': 'Not Ordered',
     #    'listings':[{'listing_id':135135135,'price': '$21', 'listing_condition': 'New', 'username': 'user1', 'title': 'Placeholder Title 4'}]},
 
@@ -265,7 +272,7 @@ def account():
     #    'listings':[{'listing_id':246246246,'price': '$42', 'listing_condition': 'User - Very Good', 'username': 'user2', 'title': 'Placeholder Title 5'},
     #               {'listing_id':369369369,'price': '$12', 'listing_condition': 'User - Good', 'username': 'user3', 'title': 'Placeholder Title 6'}]}]
     user_details = {'username': sql_query(GET_USER_FROM_ID, params=(g.user['id'], ))[0][0].decode("utf-8")}
-    return render_template('account.html', user_details=user_details,listings=listings,order_baskets=order_baskets)
+    return render_template('account.html', user_details=user_details,listings=listings,order_baskets=order_baskets,unordered_baskets=unordered_baskets)
 
 #@app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():

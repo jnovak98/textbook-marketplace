@@ -52,4 +52,13 @@
       <hr>
     {% endif %}
   {% endfor %}
+  <hr>
+  <form method="post">
+    <input type="submit" value="Buy basket: ">
+    <select name="order_basket_id">
+      {% for basket in unordered_baskets %}
+        <option value="{{ basket[0] }}">{{ basket[0] }}</option>
+      {% endfor %}  
+    </select>
+  </form>
 {% endblock %}
