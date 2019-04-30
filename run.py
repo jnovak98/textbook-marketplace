@@ -127,9 +127,10 @@ def book_listings(isbn):
         title = book_result[0][0].decode("utf-8")
         subject = book_result[0][1].decode("utf-8")
         description = book_result[0][2].decode("utf-8")
+        author = [0][3].decode("utf-8")
 
         book_details={'title': title, 'subject': subject, 'description': description,
-            'isbn': isbn, 'authors':[{'author_name': 'Author 1'}, {'author_name': 'Author 2'}]}
+            'isbn': isbn, 'authors': author}
         # listings of 'isbn' that are available. Make sure this includes the username of the user who made the listing
 
         listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(isbn,))
