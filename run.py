@@ -276,16 +276,15 @@ def login():
         password = request.form['password']
         error = None
         #check if 'username' exists in db and save results as 'user'
-        #currently can only "login" with the password 'test'
-        user = {'id': 12345, 'password': generate_password_hash('test')}
-        if user is None:
+        user = sql_query(RETURN_USER, params=(username, ))
+        if not user:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif user[0][1].decode("utf-8") is not password:
             error = 'Incorrect password.'
 
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['user_id'] = user[0][0].decode("utf-8")
             return redirect(url_for('index'))
 
         flash(error)
@@ -299,13 +298,17 @@ def logout():
 
 @app.before_request
 def load_logged_in_user():
-    user_id = session.get('user_id')
+    username = session.get('user_id')
 
-    if user_id is None:
+    if username is None:
         g.user = None
     else:
         #make sure user_id is in the database and add it as g.user['id']
-        g.user = {'id': user_id}
+        user = sql_query(RETURN_USER, params=(username, ))
+        if user:
+            g.user = {'id': user[0][0].decode("utf-8")}
+        else:
+            g.user = None
 
 if __name__ == '__main__':
     app.run(**config['app'])

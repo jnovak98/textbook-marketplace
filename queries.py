@@ -15,7 +15,7 @@ INSERT_USER = ("INSERT INTO user (username, userpassword)"
 "VALUES( %s, %s)")
 
 #2.B (username)
-RETURN_USER = ("SELECT * FROM user WHERE username=%s")
+RETURN_USER = ("SELECT username, userpassword FROM user WHERE username=%s")
 #3 Insert Book
 INSERT_BOOK = ("INSERT INTO book(isbn, subject, title, publisher, author, description)"
                 "VALUES(%s, %s, %s, %s, %s, %s)")
