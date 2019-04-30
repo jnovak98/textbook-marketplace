@@ -155,7 +155,9 @@ def book_listings(isbn):
 
     elif request.method == 'POST':
         l_id = request.form['listing_id']
+        print(l_id)
         ob_id = request.form['order_basket_id']
+        print(ob_id)
         status = "SOLD"
         #add listing_id to order_basket with id=order_basket_id
         vals = (ob_id,status,l_id)
