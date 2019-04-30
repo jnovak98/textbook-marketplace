@@ -145,11 +145,8 @@ def book_listings(isbn):
             sample_listing["username"] = sql_query(GET_USER_FROM_ID, params=(x[3], ))[0][0].decode("utf-8")
             listoflistings.append(sample_listing)
 
-
-
         #User's unordered baskets
-        baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
-
+        baskets = sql_query(MATCH_USER_ORDER_BASKET_UNORDERED, params=(g.user['id'], ))
 
         return render_template('book-listings.html', book=book_details, listings=listoflistings, baskets=baskets)
 

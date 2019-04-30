@@ -32,7 +32,7 @@
         <input type="submit" value="Add to basket: ">
         <select name="order_basket_id">
           {% for basket in baskets %}
-            <option value="{{ basket['order_basket_id'] }}">{{ basket['order_basket_id'] }}</option>
+            <option value="{{ basket[0] }}">{{ basket[0] }}</option>
           {% endfor %}  
         </select>
         <input type="hidden" id="listing_id" name="listing_id" value="{{ listing['listing_id'] }}">
