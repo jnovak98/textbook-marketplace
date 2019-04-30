@@ -43,7 +43,7 @@ INSERT_LISTING =  ("INSERT INTO listing(price, listing_status, listing_condition
 
 #9 Insert Order Basket
 INSERT_ORDER_BASKET = ("INSERT INTO order_basket(user_id, address, order_basket_status)"
-                       "VALUES(%s, %s, %s")
+                       "VALUES(%s, %s, %s)")
 
 #10 matches user id to basket id(user_id)
 MATCH_USER_ORDER_BASKET = ("SELECT order_basket_id FROM order_basket, user WHERE order_basket.user_id = %s")
