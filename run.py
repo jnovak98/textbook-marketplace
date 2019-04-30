@@ -239,7 +239,9 @@ def account():
     #     {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','title': 'Placeholder Title 3','listing_status':'Delivered'}]
 
 
-
+    user_order_basket_search = sql_query(GET_ORDER_BASKET_USER_ID, params=(g.user['id'], ))
+    order_baskets = []
+    
 
     #order_baskets = [{'order_basket_id': 12345, 'address': '1234 Road Rd.','order_basket_status': 'Not Ordered',
     #    'listings':[{'listing_id':135135135,'price': '$21', 'listing_condition': 'New', 'username': 'user1', 'title': 'Placeholder Title 4'}]},
