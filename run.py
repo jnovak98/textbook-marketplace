@@ -1,6 +1,8 @@
 #!/usr/bin/python3
+import functools
+from werkzeug.security import check_password_hash, generate_password_hash
 import configparser
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 import mysql.connector
 from queries import*
 
@@ -10,6 +12,7 @@ config.read('config.ini')
 
 # Set up application server.
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 # Create a function for fetching data from the database.
 def sql_query(sql, params):
@@ -30,6 +33,14 @@ def sql_execute(sql, params):
     cursor.close()
     db.close()
 
+def sql_execute_many(sql, params):
+    db = mysql.connector.connect(**config['mysql.connector'])
+    cursor = db.cursor(prepared = True)
+    cursor.executemany(sql, params)
+    db.commit()
+    cursor.close()
+    db.close()
+
 # For this example you can select a handler function by
 # uncommenting one of the @app.route decorators.
 
@@ -37,16 +48,46 @@ def sql_execute(sql, params):
 def basic_response():
     return "It works!" #example
 
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('login'))
+        return view(**kwargs)
+    return wrapped_view
+
 @app.route('/')
+@login_required
 def index():
     #we havent decided what these books should be, maybe books with most recently made listings?
-    placeholder_books=[{'title': 'Featured Book Title 1', 'subject': 'Math', 'description': 'This is a placeholder','isbn':789789789, 'authors':[{'author_name': 'Author'}]},
-        {'title': 'Featured Book Title 2', 'subject': 'Physics', 'description': 'This is also a placeholder','isbn':123123123, 'authors':[{'author_name': 'Author'}]},
-        {'title': 'Featured Book Title 3', 'subject': 'English', 'description': 'Another placeholder','isbn':456456456, 'authors':[{'author_name': 'Author'}]}]
+    book = sql_query(GET_EVERY_BOOK, params = ())
+    title1 = book[0][2].decode("utf-8") 
+    subject1 = book[0][1].decode("utf-8")
+    description1 = book[0][5].decode("utf-8")
+    isbn1 =book[0][0].decode("utf-8")
+    author1 = book[0][4].decode("utf-8")
+
+    title2 = book[1][2].decode("utf-8") 
+    subject2 = book[1][1].decode("utf-8")
+    description2 = book[1][5].decode("utf-8")
+    isbn2 =book[1][0].decode("utf-8")
+    author2 = book[1][4].decode("utf-8")
+
+    title3 = book[2][2].decode("utf-8") 
+    subject3 = book[2][1].decode("utf-8")
+    description3 = book[2][5].decode("utf-8")
+    isbn3 =book[2][0].decode("utf-8")
+    author3 = book[2][4].decode("utf-8")
+
+    placeholder_books=[{'title': title1 , 'subject': subject1, 'description': description1,'isbn':isbn1, 'author':author1},
+        {'title': title2 , 'subject': subject2, 'description': description2,'isbn':isbn2, 'author':author2},
+        {'title': title3 , 'subject': subject3, 'description': description3,'isbn':isbn3, 'author':author3}]
+
     return render_template('home.html', books=placeholder_books)
 
 @app.route('/search')
 def search():
+
     if ('query' in request.args and request.args.get('query')):
         search_query = request.args.get('query')
         # these books should be every book in the DB that contains "search_query",
@@ -108,10 +149,14 @@ def book_listings(isbn):
 
 
         return render_template('book-listings.html', book=book_details, listings=listoflistings, baskets=baskets)
+
     elif request.method == 'POST':
-        listing_id = request.form['listing_id']
-        order_basket_id = request.form['order_basket_id']
+        l_id = request.form['listing_id']
+        ob_id = request.form['order_basket_id']
+        status = 'SOLD'
         #add listing_id to order_basket with id=order_basket_id
+        vals = (ob_id,status,l_id)
+        sql_execute(UPDATE_LISTING, params=(ob_id,status,l_id))
         return redirect(url_for('account'))
 
 @app.route('/make-listing', methods=('GET', 'POST'))
@@ -126,14 +171,14 @@ def make_listing():
 
 
         exists = False;
-        bookCount = sql_query(GET_NUMISBN, params=(isbn, ))
+        bookCount = sql_query(GET_NUMISBN, params = (isbn, ))
         if (bookCount[0])[0] > 0:
             exists = True
 
         # this should check if a book with ISBN 'isbn' already exists
         if exists == True:
             # 1 is the hardcoded user_id
-            sql_execute(INSERT_LISTING, params=(price, 'selling', listing_condition, 1, isbn))
+            sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, 1, isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
             return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
@@ -145,15 +190,16 @@ def add_book(isbn, price, listing_condition):
     elif request.method == 'POST':
         subject = request.form['subject']
         title = request.form['title']
-        authors = request.form['authors'] #names seperated by commas. Might need to make new author if author with that name doesn't already exist
-        publisher = request.form['publisher'] #might have to make new publisher if publisher with this name doesn't exist
+        author = request.form['authors']
+        publisher = request.form['publisher'] 
         description = request.form['description']
+        vals = (isbn, subject, title, publisher, author, description)
 
-        sql_execute(INSERT_BOOK, params=(isbn, subject, title, publisher, authors, description))
+        sql_execute(INSERT_BOOK, params = vals)
         #add this new book to DB
 
         #insert listing
-        sql_execute(INSERT_LISTING, params=(price, 'selling', listing_condition, 1, isbn))
+        sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, 1, isbn))
 
         return redirect(url_for('book_listings', isbn=isbn))
 
@@ -168,7 +214,7 @@ def new_order():
 
 @app.route('/account')
 def account():
-    user_details = {'username':'placeholder_username'}
+    user_details = {'username':g.user['id']}
     listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'title': 'Placeholder Title 1', 'listing_status':'Listed'},
         {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','title': 'Placeholder Title 2','listing_status':'Ordered'},
         {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','title': 'Placeholder Title 3','listing_status':'Delivered'}]
@@ -191,6 +237,66 @@ def template_response_with_data():
     books = sql_query(sql)
     template_data['books'] = books
     return render_template('home-w-data.html', template_data=template_data)
+
+@app.route('/register', methods=('GET', 'POST'))
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        error = None
+
+        if not username:
+            error = 'Username is required.'
+        elif not password:
+            error = 'Password is required.'
+        elif False:
+            #This should check if a user with that name already exists
+            error = 'User {} is already registered.'.format(username)
+        if error is None:
+            #add username to database with password of 'generate_password_hash(password)'
+            return redirect(url_for('login'))
+
+        flash(error)
+
+    return render_template('register.html')
+
+@app.route('/login', methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        error = None
+        #check if 'username' exists in db and save results as 'user'
+        #currently can only "login" with the password 'test'
+        user = {'id': 12345, 'password': generate_password_hash('test')}
+        if user is None:
+            error = 'Incorrect username.'
+        elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+        if error is None:
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
+
+        flash(error)
+
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
+@app.before_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        #make sure user_id is in the database and add it as g.user['id']
+        g.user = {'id': user_id}
 
 if __name__ == '__main__':
     app.run(**config['app'])
