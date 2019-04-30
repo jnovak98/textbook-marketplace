@@ -100,12 +100,14 @@ GET_BOOK_TITLE = ("SELECT book.title, book.subject, book.description, book.isbn,
 GET_BOOK_ISBN = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.isbn = %s")
 
 
-UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s, listing_status = %s WHERE listing_id = %s")
+UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s WHERE listing_id = %s")
 
 GET_EVERY_BOOK = ("SELECT * FROM book")
 
 MATCH_LISTING_USERID = ("SELECT listing.listing_id, listing.price, listing.listing_condition, book.title, listing_status FROM listing, book WHERE listing.book_isbn=book.isbn AND listing.user_id = %s")
 
 
+GET_ORDER_BASKET_USER_ID = ("SELECT order_basket.order_basket_id FROM order_basket, user WHERE order_basket.user_id = user.user_id AND user.user_id = %s")
 
+GET_LISTING_ORDER_BASKET_ID = ("SELECT listing.listing_id, listing.price, listing.listing_condition FROM order_basket, listing WHERE order_basket.order_basket_id = listing.order_basket_id AND order_basket.order_basket_id = %s")
 
