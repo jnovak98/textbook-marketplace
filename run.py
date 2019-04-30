@@ -245,7 +245,25 @@ def account():
 
     user_order_basket_search = sql_query(GET_ORDER_BASKET_USER_ID, params=(g.user['id'], ))
     order_baskets = []
+    for x in user_order_basket_search:
+        sample_order_basket = {}
+        sample_order_basket["order_basket_id"] = x[0]
+        sample_order_basket["address"] = x[1].decode("utf-8")
+        sample_order_basket["order_basket_status"] = x[2].decode("utf-8")
+        listing_order_basket_search = sql_query(GET_LISTING_ORDER_BASKET_ID, params=(x[0], ))
 
+        sample_order_basket["listing"] = []
+        for y in listing_order_basket_search:
+            sample_listing_order_basket = {}
+            sample_listing_order_basket["listing_id"] = y[0]
+            sample_listing_order_basket["price"] = y[1].decode("utf-8")
+            sample_listing_order_basket["listing_condition"] = y[2].decode("utf-8")
+            sample_listing_order_basket["username"] = y[3]
+            title = sql_query(GET_TITLE_ISBN, params= (y[4].decode("utf-8"), ))
+            sample_listing_order_basket["title"] = title[0]
+            sample_order_basket["listing"].append(sample_listing_order_basket)
+
+        order_baskets.append(sample_order_basket)
 
     unordered_baskets = sql_query(MATCH_USER_ORDER_BASKET_UNORDERED, params=(g.user['id'], ))
     #order_baskets = [{'order_basket_id': 12345, 'address': '1234 Road Rd.','order_basket_status': 'Not Ordered',
