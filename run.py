@@ -253,7 +253,7 @@ def account():
             sample_listing_order_basket["listing_condition"] = y[2].decode("utf-8")
             sample_listing_order_basket["username"] = y[3]
             title = sql_query(GET_TITLE_ISBN, params= (y[4].decode("utf-8"), ))
-            sample_listing_order_basket["title"] = title[0]
+            sample_listing_order_basket["title"] = title[0].decode("utf-8")
             sample_order_basket["listings"].append(sample_listing_order_basket)
  
         order_baskets.append(sample_order_basket)
