@@ -86,6 +86,7 @@ def index():
     return render_template('home.html', books=placeholder_books)
 
 @app.route('/search')
+@login_required
 def search():
 
     if ('query' in request.args and request.args.get('query')):
@@ -120,6 +121,7 @@ def search():
 
 
 @app.route('/book-listings/<int:isbn>', methods=('GET', 'POST'))
+@login_required
 def book_listings(isbn):
     if request.method == 'GET':
         #get book based on 'isbn'. Make sure this includes an array of all the authors
@@ -161,6 +163,7 @@ def book_listings(isbn):
         return redirect(url_for('account'))
 
 @app.route('/make-listing', methods=('GET', 'POST'))
+@login_required
 def make_listing():
     if request.method == 'GET':
         return render_template('make-listing.html')
@@ -185,6 +188,7 @@ def make_listing():
             return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
 
 @app.route('/add-book/<isbn>/<price>/<listing_condition>', methods=('GET', 'POST'))
+@login_required
 def add_book(isbn, price, listing_condition):
     if request.method == 'GET':
         return render_template('add-book.html', isbn=isbn, price=price, listing_condition=listing_condition)
@@ -205,6 +209,7 @@ def add_book(isbn, price, listing_condition):
         return redirect(url_for('book_listings', isbn=isbn))
 
 @app.route('/new-order', methods=('GET', 'POST'))
+@login_required
 def new_order():
     if request.method == 'GET':
         return render_template('new-order.html')
@@ -216,6 +221,7 @@ def new_order():
         return redirect(url_for('account'))
 
 @app.route('/account')
+@login_required
 def account():
     user_details = {'username':g.user['id']}
     listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'title': 'Placeholder Title 1', 'listing_status':'Listed'},
@@ -248,15 +254,17 @@ def register():
         password = request.form['password']
         error = None
 
+        existing_user = sql_query(RETURN_USER, params=(username, ))
+
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif False:
+        elif existing_user:
             #This should check if a user with that name already exists
             error = 'User {} is already registered.'.format(username)
         if error is None:
-            #add username to database with password of 'generate_password_hash(password)'
+            sql_execute(INSERT_USER, params=(username, password))
             return redirect(url_for('login'))
 
         flash(error)
