@@ -240,12 +240,12 @@ def account():
     #     {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','title': 'Placeholder Title 3','listing_status':'Delivered'}]
 
 
-    # order_baskets = [{'order_basket_id': 12345, 'address': '1234 Road Rd.','order_basket_status': 'Not Ordered',
-    #     'listings':[{'listing_id':135135135,'price': '$21', 'listing_condition': 'New', 'username': 'user1', 'title': 'Placeholder Title 4'}]},
+    order_baskets = [{'order_basket_id': 12345, 'address': '1234 Road Rd.','order_basket_status': 'Not Ordered',
+        'listings':[{'listing_id':135135135,'price': '$21', 'listing_condition': 'New', 'username': 'user1', 'title': 'Placeholder Title 4'}]},
 
-    #     {'order_basket_id': 67890, 'date_made': '1/17/19', 'address': '3456 Street St.','order_basket_status': 'Delivered',
-    #     'listings':[{'listing_id':246246246,'price': '$42', 'listing_condition': 'User - Very Good', 'username': 'user2', 'title': 'Placeholder Title 5'},
-    #                 {'listing_id':369369369,'price': '$12', 'listing_condition': 'User - Good', 'username': 'user3', 'title': 'Placeholder Title 6'}]}]
+        {'order_basket_id': 67890, 'date_made': '1/17/19', 'address': '3456 Street St.','order_basket_status': 'Delivered',
+        'listings':[{'listing_id':246246246,'price': '$42', 'listing_condition': 'User - Very Good', 'username': 'user2', 'title': 'Placeholder Title 5'},
+                    {'listing_id':369369369,'price': '$12', 'listing_condition': 'User - Good', 'username': 'user3', 'title': 'Placeholder Title 6'}]}]
     user_details = {'username': sql_query(GET_USER_FROM_ID, params=(g.user['id'], ))[0][0].decode("utf-8")}
     return render_template('account.html', user_details=user_details,listings=listings,order_baskets=order_baskets)
 
