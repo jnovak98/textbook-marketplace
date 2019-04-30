@@ -93,6 +93,7 @@ GET_BOOK_TITLE = ("SELECT book.title, book.subject, book.description, book.isbn,
 
 GET_BOOK_ISBN = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.isbn = %s")
 
+
 UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s, listing_status = %s WHERE listing_id = %s")
 
 GET_EVERY_BOOK = ("SELECT * FROM book")
