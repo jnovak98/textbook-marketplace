@@ -179,7 +179,7 @@ def make_listing():
         # this should check if a book with ISBN 'isbn' already exists
         if (bookCount[0])[0] > 0:
 
-            sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, g.user['id'], isbn))
+            sql_execute(INSERT_LISTING, params = (price, 'SELLING', listing_condition, g.user['id'], isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
             return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
@@ -213,7 +213,7 @@ def new_order():
     elif request.method == 'POST':
         address = request.form['address']
         #add new order basket for user at given address
-        sql_execute(INSERT_ORDER_BASKET, params=(1, address, 'OPEN'))
+        sql_execute(INSERT_ORDER_BASKET, params=(g.user['id'], address, 'OPEN'))
 
         return redirect(url_for('account'))
 
