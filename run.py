@@ -279,7 +279,7 @@ def login():
         user = sql_query(RETURN_USER, params=(username, ))
         if not user:
             error = 'Incorrect username.'
-        elif user[0][1].decode("utf-8") is not password:
+        elif user[0][1].decode("utf-8") != password:
             error = 'Incorrect password.'
 
         if error is None:
