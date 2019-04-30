@@ -173,16 +173,11 @@ def make_listing():
         listing_condition = request.form['listing_condition']
         #add this listing to DB (get user from g.user['id'])
 
-
-        exists = False;
         bookCount = sql_query(GET_NUMISBN, params = (isbn, ))
-        if (bookCount[0])[0] > 0:
-            exists = True
-
         # this should check if a book with ISBN 'isbn' already exists
-        if exists == True:
-            # 1 is the hardcoded user_id
-            sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, 1, isbn))
+        if (bookCount[0])[0] > 0:
+            user_id = sql_query(RETURN_USER, params=(g.user['id']))[0][2]
+            sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, user_id, isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
             return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
