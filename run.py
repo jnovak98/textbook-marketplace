@@ -54,8 +54,9 @@ def search():
 
         book_search = sql_query(GET_BOOK_TITLE, params=(search_query, ))
         listofbooks = []
-        sample_book = {}
+
         for x in book_search:
+            sample_book = {}
             sample_book["title"] = x[0].decode("utf-8")
             sample_book["subject"] = x[1].decode("utf-8")
             sample_book["description"] = x[2].decode("utf-8")
@@ -92,19 +93,20 @@ def book_listings(isbn):
 
         listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(isbn,))
         listoflistings = []
-        sample_listing = {}
         for x in listing_search:
+            sample_listing = {}
             sample_listing["listing_id"] = x[0]
             sample_listing["price"] = x[1].decode("utf-8")
             sample_listing["listing_condition"] = x[2].decode("utf-8")
             sample_listing["username"] = x[3]
             listoflistings.append(sample_listing)
 
-        listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'username': 'user1'},
-        {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','username': 'user2'},
-        {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','username': 'user3'}]
+
+
         #User's unordered baskets
         baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
+
+
         return render_template('book-listings.html', book=book_details, listings=listoflistings, baskets=baskets)
     elif request.method == 'POST':
         listing_id = request.form['listing_id']
