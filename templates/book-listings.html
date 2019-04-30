@@ -35,7 +35,7 @@
             <option value="{{ basket['order_basket_id'] }}">{{ basket['order_basket_id'] }}</option>
           {% endfor %}  
         </select>
-        <input type="hidden" id="listing_id" name="listing_id" value="{{ listing['listing_condition'] }}">
+        <input type="hidden" id="listing_id" name="listing_id" value="{{ listing['listing_id'] }}">
       </form>
     </article>
     {% if not loop.last %}
