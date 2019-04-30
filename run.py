@@ -158,10 +158,9 @@ def book_listings(isbn):
         print(l_id)
         ob_id = request.form['order_basket_id']
         print(ob_id)
-        status = "SOLD"
         #add listing_id to order_basket with id=order_basket_id
-        vals = (ob_id,status,l_id)
-        sql_execute(UPDATE_LISTING, params=(ob_id, status, l_id))
+        vals = (ob_id,l_id)
+        sql_execute(UPDATE_LISTING, params=(ob_id, l_id))
         return redirect(url_for('account'))
 
 @app.route('/make-listing', methods=('GET', 'POST'))
