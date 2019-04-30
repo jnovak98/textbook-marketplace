@@ -252,7 +252,7 @@ def account():
         sample_order_basket["order_basket_status"] = x[2].decode("utf-8")
         listing_order_basket_search = sql_query(GET_LISTING_ORDER_BASKET_ID, params=(x[0], ))
 
-        sample_order_basket["listing"] = []
+        sample_order_basket["listings"] = []
         for y in listing_order_basket_search:
             sample_listing_order_basket = {}
             sample_listing_order_basket["listing_id"] = y[0]
@@ -261,8 +261,7 @@ def account():
             sample_listing_order_basket["username"] = y[3]
             title = sql_query(GET_TITLE_ISBN, params= (y[4].decode("utf-8"), ))
             sample_listing_order_basket["title"] = title[0]
-            sample_order_basket["listing"].append(sample_listing_order_basket)
-
+            sample_order_basket["listings"].append(sample_listing_order_basket)
         order_baskets.append(sample_order_basket)
 
     unordered_baskets = sql_query(MATCH_USER_ORDER_BASKET_UNORDERED, params=(g.user['id'], ))
