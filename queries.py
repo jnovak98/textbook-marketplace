@@ -15,7 +15,7 @@ INSERT_USER = ("INSERT INTO user (username, userpassword)"
 "VALUES( %s, %s)")
 
 #2.B (username)
-RETURN_USER = ("SELECT * FROM user WHERE username=%s")
+RETURN_USER = ("SELECT username, userpassword FROM user WHERE username=%s")
 #3 Insert Book
 INSERT_BOOK = ("INSERT INTO book(isbn, subject, title, publisher, author, description)"
                 "VALUES(%s, %s, %s, %s, %s, %s)")
@@ -92,6 +92,7 @@ GET_LISTING_BOOK_ISBN = ("SELECT listing.listing_id, listing.price, listing.list
 GET_BOOK_TITLE = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.title = %s")
 
 GET_BOOK_ISBN = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.isbn = %s")
+
 
 UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s, listing_status = %s WHERE listing_id = %s")
 
