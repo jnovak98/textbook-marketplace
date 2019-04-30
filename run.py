@@ -201,7 +201,7 @@ def add_book(isbn, price, listing_condition):
         #add this new book to DB
 
         #insert listing
-        sql_execute(INSERT_LISTING, params=(price, 'SELLING', listing_condition, 1, isbn))
+        sql_execute(INSERT_LISTING, params=(price, 'SELLING', listing_condition, g.user['id'], isbn))
 
         return redirect(url_for('book_listings', isbn=isbn))
 
