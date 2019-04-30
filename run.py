@@ -225,7 +225,7 @@ def new_order():
 def account():
     user_details = {'username':g.user['id']}
 
-    listing_search = sql_query(MATCH_LISTING_USERID, params=(1,))
+    listing_search = sql_query(MATCH_LISTING_USERID, params=(g.user['id'],))
     listings = []
     for x in listing_search:
         sample_listing = {}
