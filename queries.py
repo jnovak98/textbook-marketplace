@@ -97,7 +97,7 @@ UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s, listing_status = %s 
 
 GET_EVERY_BOOK = ("SELECT * FROM book")
 
-MATCH_LISTING_USERID("SELECT listing.listing_id, listing.price, listing.listing_condition, book.title, listing_status FROM listing, book WHERE listing.book_isbn=book.isbn AND listing.user_id = %s")
+MATCH_LISTING_USERID = ("SELECT listing.listing_id, listing.price, listing.listing_condition, book.title, listing_status FROM listing, book WHERE listing.book_isbn=book.isbn AND listing.user_id = %s")
 
 
 
