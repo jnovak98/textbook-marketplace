@@ -176,7 +176,7 @@ def make_listing():
         bookCount = sql_query(GET_NUMISBN, params = (isbn, ))
         # this should check if a book with ISBN 'isbn' already exists
         if (bookCount[0])[0] > 0:
-            user_id = sql_query(RETURN_USER, params=(g.user['id']))[0][2]
+            user_id = sql_query(RETURN_USER, params=(g.user['id']), )[0][2]
             sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, user_id, isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
