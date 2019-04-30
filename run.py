@@ -224,9 +224,22 @@ def new_order():
 @login_required
 def account():
     user_details = {'username':g.user['id']}
-    listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'title': 'Placeholder Title 1', 'listing_status':'Listed'},
-        {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','title': 'Placeholder Title 2','listing_status':'Ordered'},
-        {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','title': 'Placeholder Title 3','listing_status':'Delivered'}]
+
+    listing_search = sql_query(MATCH_LISTING_USERID, params=(1,))
+    listings = []
+    for x in listing_search:
+        sample_listing = {}
+        sample_listing["listing_id"] = x[0]
+        sample_listing["price"] = x[1].decode("utf-8")
+        sample_listing["listing_condition"] = x[2].decode("utf-8")
+        sample_listing["title"] = x[3]
+        sample_listing["listing_status"] = x[4]
+        listings.append(sample_listing)
+
+
+    # listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'title': 'Placeholder Title 1', 'listing_status':'Listed'},
+    #     {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','title': 'Placeholder Title 2','listing_status':'Ordered'},
+    #     {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','title': 'Placeholder Title 3','listing_status':'Delivered'}]
     order_baskets = [{'order_basket_id': 12345, 'date_made': '4/17/19', 'address': '1234 Road Rd.','order_basket_status': 'Not Ordered',
         'listings':[{'listing_id':135135135,'price': '$21', 'listing_condition': 'New', 'username': 'user1', 'title': 'Placeholder Title 4'}]},
         {'order_basket_id': 67890, 'date_made': '1/17/19', 'address': '3456 Street St.','order_basket_status': 'Delivered',
