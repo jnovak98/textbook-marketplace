@@ -232,8 +232,8 @@ def account():
         sample_listing["listing_id"] = x[0]
         sample_listing["price"] = x[1].decode("utf-8")
         sample_listing["listing_condition"] = x[2].decode("utf-8")
-        sample_listing["title"] = x[3]
-        sample_listing["listing_status"] = x[4]
+        sample_listing["title"] = x[3].decode("utf-8")
+        sample_listing["listing_status"] = x[4].decode("utf-8")
         listings.append(sample_listing)
 
 
