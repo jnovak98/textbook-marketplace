@@ -53,6 +53,9 @@ INSERT_ORDER_BASKET = ("INSERT INTO order_basket(user_id, address, order_basket_
 #10 matches user id to basket id(user_id)
 MATCH_USER_ORDER_BASKET = ("SELECT order_basket_id FROM order_basket, user WHERE order_basket.user_id = %s")
 
+#10.B gets all a users unordered baskets
+MATCH_USER_ORDER_BASKET_UNORDERED = ("SELECT DISTINCT order_basket_id FROM order_basket, user WHERE order_basket.user_id = %s AND order_basket.order_basket_status=\"OPEN\"")
+
 #11 matches orderbasket_id to listing_id
 MATCH_ORDER_BASKET_LISTING = ("SELECT listing.listing_id FROM listing, order_basket  WHERE order_basket.order_basket_id = %s")
 
