@@ -82,16 +82,18 @@ SUM_ORDER_BASKET= (
 #19 takes author_id, isbn
 INSERT_AUTHORS = ("INSERT INTO authors VALUES(%s, %s)")
 
-UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s, listing_status = %s WHERE listing_id = %s")
-
 #21 get number of listings for user
 GET_NUMPUBLISHERS = ("SELECT COUNT(DISTINCT pub_id) FROM publisher WHERE %s = pub_id")
 
-GET_LISTING_BOOK_ISBN = ("SELECT book.title, listing.price, listing.listing_condition FROM book, listing WHERE book.title = %s AND book.isbn = listing.book_isbn AND listing.listing_status = 'selling'")
+GET_LISTING_BOOK_ISBN = ("SELECT listing.listing_id, listing.price, listing.listing_condition, listing.user_id FROM book, listing WHERE book.isbn = %s AND book.isbn = listing.book_isbn AND listing.listing_status = 'selling'")
 
+GET_BOOK_TITLE = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.title = %s")
 
+GET_BOOK_ISBN = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.isbn = %s")
 
+UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s, listing_status = %s WHERE listing_id = %s")
 
+GET_EVERY_BOOK = ("SELECT * FROM book")
 
 
 

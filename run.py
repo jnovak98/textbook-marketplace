@@ -93,26 +93,28 @@ def search():
         # these books should be every book in the DB that contains "search_query",
         # either in the name or description, based on how much it shows up
 
-        listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(search_query, ))
-        listing_books = []
-        sample_book = {}
-        for x in listing_search:
-            sample_book["book"] = x[0]
-            sample_book["listing_price"] = x[1]
-            sample_book["listing_condition"] = x[2]
-            listing_books.append(sample_book)
+        book_search = sql_query(GET_BOOK_TITLE, params=(search_query, ))
+        listofbooks = []
 
-        placeholder_books = [
-            {'title': listing_books[0][0], 'subject': listing_books[0][1], 'description': listing_books[0][2],
-             'isbn': 123456, 'authors': [{'author_name': 'Author'}]},
-            {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same', 'isbn': 123123123,
-             'authors': [{'author_name': 'Author'}]},
-            {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet', 'isbn': 789789789,
-             'authors': [{'author_name': 'Author'}]},
-            {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description', 'isbn': 456456456,
-             'authors': [{'author_name': 'Author'}]}]
+        for x in book_search:
+            sample_book = {}
+            sample_book["title"] = x[0].decode("utf-8")
+            sample_book["subject"] = x[1].decode("utf-8")
+            sample_book["description"] = x[2].decode("utf-8")
+            sample_book["isbn"] = x[3].decode("utf-8")
+            sample_book["author"] = x[4].decode("utf-8")
+            listofbooks.append(sample_book)
 
-        return render_template('search.html', books=placeholder_books, query=search_query)
+        # placeholder_books = [
+        #     {'title': listing_books[0][0], 'subject': listing_books[0][1], 'description': listing_books[0][2],
+        #      'isbn': 123456, 'authors': [{'author_name': 'Author'}]},
+        #     {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same', 'isbn': 123123123,
+        #      'authors': [{'author_name': 'Author'}]},
+        #     {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet', 'isbn': 789789789,
+        #      'authors': [{'author_name': 'Author'}]},
+        #     {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description', 'isbn': 456456456,
+        #      'authors': [{'author_name': 'Author'}]}]
+        return render_template('search.html', books=listofbooks, query=search_query)
     else:
         return redirect(url_for('index'))
 
@@ -121,15 +123,33 @@ def search():
 def book_listings(isbn):
     if request.method == 'GET':
         #get book based on 'isbn'. Make sure this includes an array of all the authors
-        book_details={'title': 'Placeholder Book', 'subject': 'Math', 'description': 'This is a placeholder book listings page',
-            'isbn': isbn, 'author':'Author'}
+        book_result = sql_query(GET_BOOK_ISBN, params=(isbn,))
+        title = book_result[0][0].decode("utf-8")
+        subject = book_result[0][1].decode("utf-8")
+        description = book_result[0][2].decode("utf-8")
+        author = book_result[0][4].decode("utf-8")
+
+        book_details={'title': title, 'subject': subject, 'description': description,
+            'isbn': isbn, 'author': author}
         # listings of 'isbn' that are available. Make sure this includes the username of the user who made the listing
-        listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'Noneew', 'username': 'user1'},
-        {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','username': 'user2'},
-        {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','username': 'user3'}]
+
+        listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(isbn,))
+        listoflistings = []
+        for x in listing_search:
+            sample_listing = {}
+            sample_listing["listing_id"] = x[0]
+            sample_listing["price"] = x[1].decode("utf-8")
+            sample_listing["listing_condition"] = x[2].decode("utf-8")
+            sample_listing["username"] = x[3]
+            listoflistings.append(sample_listing)
+
+
+
         #User's unordered baskets
         baskets=[{'order_basket_id':149872},{'order_basket_id': 476343},{'order_basket_id':345645}]
-        return render_template('book-listings.html', book=book_details, listings=listings, baskets=baskets)
+
+
+        return render_template('book-listings.html', book=book_details, listings=listoflistings, baskets=baskets)
 
     elif request.method == 'POST':
         l_id = request.form['listing_id']
