@@ -142,7 +142,7 @@ def book_listings(isbn):
             sample_listing["listing_id"] = x[0]
             sample_listing["price"] = x[1].decode("utf-8")
             sample_listing["listing_condition"] = x[2].decode("utf-8")
-            sample_listing["username"] = x[3]
+            sample_listing["username"] = sql_query(GET_USER_FROM_ID, params=(x[3], ))[0][0].decode("utf-8")
             listoflistings.append(sample_listing)
 
 
@@ -176,8 +176,7 @@ def make_listing():
         bookCount = sql_query(GET_NUMISBN, params = (isbn, ))
         # this should check if a book with ISBN 'isbn' already exists
         if (bookCount[0])[0] > 0:
-            user_id = sql_query(RETURN_USER, params=(g.user['id']))[0][2]
-            sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, user_id, isbn))
+            sql_execute(INSERT_LISTING, params = (price, 'selling', listing_condition, g.user['id'], isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
             return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
@@ -216,7 +215,7 @@ def new_order():
 @app.route('/account')
 @login_required
 def account():
-    user_details = {'username':g.user['id']}
+    user_details = {'username': sql_query(GET_USER_FROM_ID, params=(g.user['id'], ))[0][0].decode("utf-8")}
     listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'title': 'Placeholder Title 1', 'listing_status':'Listed'},
         {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','title': 'Placeholder Title 2','listing_status':'Ordered'},
         {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','title': 'Placeholder Title 3','listing_status':'Delivered'}]
@@ -279,7 +278,7 @@ def login():
 
         if error is None:
             session.clear()
-            session['user_id'] = user[0][0].decode("utf-8")
+            session['user_id'] = user[0][2]
             return redirect(url_for('index'))
 
         flash(error)
@@ -293,15 +292,15 @@ def logout():
 
 @app.before_request
 def load_logged_in_user():
-    username = session.get('user_id')
+    user_id = session.get('user_id')
 
-    if username is None:
+    if user_id is None:
         g.user = None
     else:
         #make sure user_id is in the database and add it as g.user['id']
-        user = sql_query(RETURN_USER, params=(username, ))
+        user = sql_query(GET_USER_FROM_ID, params=(user_id, ))
         if user:
-            g.user = {'id': user[0][0].decode("utf-8")}
+            g.user = {'id': user[0][2]}
         else:
             g.user = None
 
