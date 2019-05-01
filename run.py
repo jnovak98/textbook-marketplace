@@ -24,19 +24,11 @@ def sql_query(sql, params):
     db.close()
     return result
 
-
+# A function that changes data in the databases 
 def sql_execute(sql, params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
     cursor.execute(sql, params)
-    db.commit()
-    cursor.close()
-    db.close()
-
-def sql_execute_many(sql, params):
-    db = mysql.connector.connect(**config['mysql.connector'])
-    cursor = db.cursor(prepared = True)
-    cursor.executemany(sql, params)
     db.commit()
     cursor.close()
     db.close()
@@ -48,6 +40,7 @@ def sql_execute_many(sql, params):
 def basic_response():
     return "It works!" #example
 
+# A function that redirects user to the login page
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
