@@ -1,5 +1,3 @@
-
-
 #1.A get book isbn from input book title
 GET_ISBN_TITLE = ("SELECT book.ISBN FROM book WHERE book.title = %s")
 
@@ -94,35 +92,35 @@ INSERT_AUTHORS = ("INSERT INTO authors VALUES(%s, %s)")
 #20 get number of listings for user
 GET_NUMPUBLISHERS = ("SELECT COUNT(DISTINCT pub_id) FROM publisher WHERE %s = pub_id")
 
-#21
+#21 Get a listing based on a books isbn
 GET_LISTING_BOOK_ISBN = ("SELECT listing.listing_id, listing.price, listing.listing_condition, listing.user_id FROM book, listing WHERE book.isbn = %s AND book.isbn = listing.book_isbn AND listing.listing_status = 'selling'")
 
-#22
+#22 Get a book from the book title
 GET_BOOK_TITLE = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.title = %s")
 
-#23
+#23 Get a book from the book isbn
 GET_BOOK_ISBN = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.isbn = %s")
 
-#24
+#24 Update a listing.order_basket_id given a listing_id
 UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s WHERE listing_id = %s")
 
-#25
+#25 Obtaining every book
 GET_EVERY_BOOK = ("SELECT * FROM book")
 
-#26
+#26 Obtaining the listing from the user_id
 MATCH_LISTING_USERID = ("SELECT listing.listing_id, listing.price, listing.listing_condition, book.title, listing_status FROM listing, book WHERE listing.book_isbn=book.isbn AND listing.user_id = %s")
 
-#27
+#27 Obtaining an order_basket from the user_id
 GET_ORDER_BASKET_USER_ID = ("SELECT DISTINCT order_basket.order_basket_id, order_basket.address, order_basket.order_basket_status FROM order_basket, user WHERE order_basket.user_id = user.user_id AND user.user_id = %s")
 
-#28
+#28 Obtaining a listing from an order_basket_id
 GET_LISTING_ORDER_BASKET_ID = ("SELECT listing.listing_id, listing.price, listing.listing_condition, listing.user_id, listing.book_isbn FROM order_basket, listing WHERE order_basket.order_basket_id = listing.order_basket_id AND order_basket.order_basket_id = %s")
 
-#29
+#29 Updating a listing to sold when given a listing_id
 BUY_LISTING = ("UPDATE listing SET listing_status = 'SOLD', listing.order_basket_id = NULL WHERE listing_id = %s")
 
-#30
+#30 Updating an order_basket to closed when given an order_basket_id
 BUY_ORDER_BASKET = ("UPDATE order_basket SET order_basket_status = 'CLOSED' WHERE order_basket_id = %s")
 
-#31
+#31 Delete an order_basket when given a order_basket_id
 DELETE_ORDER_BASKET = ("DELETE FROM order_basket WHERE order_basket_id = %s")
