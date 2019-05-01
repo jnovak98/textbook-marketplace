@@ -112,7 +112,7 @@ GET_ORDER_BASKET_USER_ID = ("SELECT DISTINCT order_basket.order_basket_id, order
 
 GET_LISTING_ORDER_BASKET_ID = ("SELECT listing.listing_id, listing.price, listing.listing_condition, listing.user_id, listing.book_isbn FROM order_basket, listing WHERE order_basket.order_basket_id = listing.order_basket_id AND order_basket.order_basket_id = %s")
 
-BUY_LISTING = ("UPDATE listing SET listing_status = 'SOLD' WHERE listing_id = %s")
+BUY_LISTING = ("UPDATE listing SET listing_status = 'SOLD', listing.order_basket_id = NULL WHERE listing_id = %s")
 
 BUY_ORDER_BASKET = ("UPDATE order_basket SET order_basket_status = 'CLOSED' WHERE order_basket_id = %s")
 
