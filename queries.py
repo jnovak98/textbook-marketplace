@@ -1,48 +1,49 @@
 
 
-#1.A
+#1.A get book isbn from input book title
 GET_ISBN_TITLE = ("SELECT book.ISBN FROM book WHERE book.title = %s")
 
-#1.A
+#1.B get all ordered books from isbn from input book isbn
 GET_BOOK_ISBN = ("SELECT * FROM book WHERE book.ISBN = %s ORDER BY isbn")
 
+#1.C return all books from book
 GET_EVERY_BOOK = ("SELECT* FROM book;")
-#1.B
+
+#1.D Selecting all books and displaying its title when given an isbn
 GET_TITLE_ISBN = ("SELECT book.title FROM book WHERE book.ISBN = %s")
 
-#2.A (username, password)
+#2.A inserting username and userpassword into user
 INSERT_USER = ("INSERT INTO user (username, userpassword)"
 "VALUES( %s, %s)")
 
-#2.B (username)
+#2.B Selecting username, userpassword, userid when given a username
 RETURN_USER = ("SELECT username, userpassword, user_id FROM user WHERE username=%s")
 
-#2.C (user_id)
+#2.C Returning a user given a user_id
 GET_USER_FROM_ID = ("SELECT username, userpassword, user_id FROM user WHERE user_id=%s")
+
 #3 Insert Book
 INSERT_BOOK = ("INSERT INTO book(isbn, subject, title, publisher, author, description)"
                 "VALUES(%s, %s, %s, %s, %s, %s)")
 
-#4 get title by isbn
+#4 Getting the number of books with a given isbn
 GET_NUMISBN = ("SELECT COUNT(DISTINCT isbn) FROM book WHERE book.isbn = %s")
-
-BUY_NUMISBN = ("SELECT COUNT(DISTINCT isbn) FROM book WHERE book.isbn = 63")
 
 #5 changes listing_status to sold. takes order basket, listing id
 BUY_BOOK = ("UPDATE listing "
 "SET listing_status = 'sold', order_basket_id = %s "
 "WHERE listing_id = %s")
 
-#6 takes pub_id, pub_name
+#6 inserts a publisher and takes pub_id, pub_name
 INSERT_PUBLISHER = ("INSERT INTO publisher "
 "VALUES(%s, %s)")
 
 
-#7 (author_id, author_name)
+#7 Insert an author while given author_id, author_name
 INSERT_AUTHOR = ("INSERT INTO author "
 "VALUES(%s, %s)")
 
-#8 (listing_id, user.user_id, order_basket_id, IBSN, price, listing_status, listing_condition); listing status is all caps
+#8 Insert a new listing, listing status is all caps
 INSERT_LISTING =  ("INSERT INTO listing(price, listing_status, listing_condition, user_id, book_isbn)"
 "VALUES(%s, %s, %s, %s, %s)")
 
@@ -90,30 +91,38 @@ SUM_ORDER_BASKET= (
 #19 takes author_id, isbn
 INSERT_AUTHORS = ("INSERT INTO authors VALUES(%s, %s)")
 
-#21 get number of listings for user
+#20 get number of listings for user
 GET_NUMPUBLISHERS = ("SELECT COUNT(DISTINCT pub_id) FROM publisher WHERE %s = pub_id")
 
+#21
 GET_LISTING_BOOK_ISBN = ("SELECT listing.listing_id, listing.price, listing.listing_condition, listing.user_id FROM book, listing WHERE book.isbn = %s AND book.isbn = listing.book_isbn AND listing.listing_status = 'selling'")
 
+#22
 GET_BOOK_TITLE = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.title = %s")
 
+#23
 GET_BOOK_ISBN = ("SELECT book.title, book.subject, book.description, book.isbn, book.author FROM book WHERE book.isbn = %s")
 
-
+#24
 UPDATE_LISTING = ("UPDATE listing SET order_basket_id = %s WHERE listing_id = %s")
 
+#25
 GET_EVERY_BOOK = ("SELECT * FROM book")
 
+#26
 MATCH_LISTING_USERID = ("SELECT listing.listing_id, listing.price, listing.listing_condition, book.title, listing_status FROM listing, book WHERE listing.book_isbn=book.isbn AND listing.user_id = %s")
 
-
-
+#27
 GET_ORDER_BASKET_USER_ID = ("SELECT DISTINCT order_basket.order_basket_id, order_basket.address, order_basket.order_basket_status FROM order_basket, user WHERE order_basket.user_id = user.user_id AND user.user_id = %s")
 
+#28
 GET_LISTING_ORDER_BASKET_ID = ("SELECT listing.listing_id, listing.price, listing.listing_condition, listing.user_id, listing.book_isbn FROM order_basket, listing WHERE order_basket.order_basket_id = listing.order_basket_id AND order_basket.order_basket_id = %s")
 
+#29
 BUY_LISTING = ("UPDATE listing SET listing_status = 'SOLD', listing.order_basket_id = NULL WHERE listing_id = %s")
 
+#30
 BUY_ORDER_BASKET = ("UPDATE order_basket SET order_basket_status = 'CLOSED' WHERE order_basket_id = %s")
 
+#31
 DELETE_ORDER_BASKET = ("DELETE FROM order_basket WHERE order_basket_id = %s")
