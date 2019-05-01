@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import functools
 from werkzeug.security import check_password_hash, generate_password_hash
+import werkzeug.exceptions
 import configparser
 from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 import mysql.connector
@@ -33,21 +34,8 @@ def sql_execute(sql, params):
     cursor.close()
     db.close()
 
-def sql_execute_many(sql, params):
-    db = mysql.connector.connect(**config['mysql.connector'])
-    cursor = db.cursor(prepared = True)
-    cursor.executemany(sql, params)
-    db.commit()
-    cursor.close()
-    db.close()
 
-# For this example you can select a handler function by
-# uncommenting one of the @app.route decorators.
-
-#@app.route('/')
-def basic_response():
-    return "It works!" #example
-
+# User log in
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -56,6 +44,7 @@ def login_required(view):
         return view(**kwargs)
     return wrapped_view
 
+# Home page. Displays the first 3 books in the database. 
 @app.route('/')
 @login_required
 def index():
@@ -85,6 +74,7 @@ def index():
 
     return render_template('home.html', books=placeholder_books)
 
+# Returns the book based on its title. 
 @app.route('/search')
 @login_required
 def search():
@@ -111,7 +101,7 @@ def search():
     else:
         return redirect(url_for('index'))
 
-
+# List all the current listings for a specific book based on the book's isbn. 
 @app.route('/book-listings/<int:isbn>', methods=('GET', 'POST'))
 @login_required
 def book_listings(isbn):
@@ -146,11 +136,15 @@ def book_listings(isbn):
         l_id = request.form['listing_id']
         print(l_id)
         ob_id = request.form['order_basket_id']
-        print(ob_id)
+    
         #add listing_id to order_basket with id=order_basket_id
         vals = (ob_id,l_id)
         sql_execute(UPDATE_LISTING, params=(ob_id, l_id))
         return redirect(url_for('account'))
+
+@app.errorhandler(werkzeug.exceptions.BadRequest)
+def handle_bad_request(e):
+    return redirect(url_for('account'))
 
 @app.route('/make-listing', methods=('GET', 'POST'))
 @login_required
