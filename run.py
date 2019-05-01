@@ -106,14 +106,6 @@ def search():
             sample_book["author"] = x[4].decode("utf-8")
             listofbooks.append(sample_book)
 
-        # placeholder_books = [
-        #     {'title': listing_books[0][0], 'subject': listing_books[0][1], 'description': listing_books[0][2],
-        #      'isbn': 123456, 'authors': [{'author_name': 'Author'}]},
-        #     {'title': 'Book Search Result 2', 'subject': 'Physics', 'description': 'Same', 'isbn': 123123123,
-        #      'authors': [{'author_name': 'Author'}]},
-        #     {'title': 'Book Search Result 3', 'subject': 'English', 'description': 'yeet', 'isbn': 789789789,
-        #      'authors': [{'author_name': 'Author'}]},
-        #     {'title': 'Book Search Result 4', 'subject': 'a subject', 'description': 'a description', 'isbn': 456456456,
         #      'authors': [{'author_name': 'Author'}]}]
         return render_template('search.html', books=listofbooks, query=search_query)
     else:
@@ -238,10 +230,6 @@ def account():
         listings.append(sample_listing)
 
 
-    # listings=[{'listing_id':123123123,'price': '$20', 'listing_condition': 'New', 'title': 'Placeholder Title 1', 'listing_status':'Listed'},
-    #     {'listing_id':456456456,'price': '$10', 'listing_condition': 'Used - Good','title': 'Placeholder Title 2','listing_status':'Ordered'},
-    #     {'listing_id':789789789,'price': '$15', 'listing_condition': 'Used - Like New','title': 'Placeholder Title 3','listing_status':'Delivered'}]
-
 
     user_order_basket_search = sql_query(GET_ORDER_BASKET_USER_ID, params=(g.user['id'], ))
     order_baskets = []
@@ -265,12 +253,7 @@ def account():
         order_baskets.append(sample_order_basket)
 
     unordered_baskets = sql_query(MATCH_USER_ORDER_BASKET_UNORDERED, params=(g.user['id'], ))
-    #order_baskets = [{'order_basket_id': 12345, 'address': '1234 Road Rd.','order_basket_status': 'Not Ordered',
-    #    'listings':[{'listing_id':135135135,'price': '$21', 'listing_condition': 'New', 'username': 'user1', 'title': 'Placeholder Title 4'}]},
-
-    #    {'order_basket_id': 67890, 'date_made': '1/17/19', 'address': '3456 Street St.','order_basket_status': 'Delivered',
-    #    'listings':[{'listing_id':246246246,'price': '$42', 'listing_condition': 'User - Very Good', 'username': 'user2', 'title': 'Placeholder Title 5'},
-    #               {'listing_id':369369369,'price': '$12', 'listing_condition': 'User - Good', 'username': 'user3', 'title': 'Placeholder Title 6'}]}]
+   
     user_details = {'username': sql_query(GET_USER_FROM_ID, params=(g.user['id'], ))[0][0].decode("utf-8")}
     return render_template('account.html', user_details=user_details,listings=listings,order_baskets=order_baskets,unordered_baskets=unordered_baskets)
 
@@ -354,80 +337,4 @@ def load_logged_in_user():
 
 if __name__ == '__main__':
     app.run(**config['app'])
-
-#1a
-def getISBNTitle(title):
-    return sql_query(GET_ISBN_TITLE, title)
-#1b
-def getTitleISBN(isbn):
-    return sql_query(GET_TITLE_ISBN, isbn)
-
-#4
-def getNumISBN(isbn):
-    return sql_query(GET_ISBNCOUNT, ISBN)
-
-#7
-def insertAuthor(author_id, author_name):
-    return sql_query(INSERT_AUTHOR, (author_id, author_name))
-
-#10
-def matchUserIDOrderBasket(user_id):
-    return sql_query(MATCH_USER_ORDER_BASKET,user_id)
-
-#13
-def matchISBNAuthorName(isbn):
-    return sql_query(MATCH_ISBN_AUTHORNAME,isbn)
-
-#16
-def getNumListings(isbn):
-    return sql_query(GET_NUMLISTINGS, isbn)
-
-#19
-def insertPublisher(pub_id, pub_name):
-    return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
-
-#2
-def insertUser(user_id, username, password):
-    return sql_query(INSERT_USER, user_id, username, password)
-#5
-def buyBook(listing_id):
-    return sql_query(BUY_BOOK, listing_id)
-#8
-def insertListing(listing_id, price, listing_status, listing_condition, user_id, order_basket_id, book_isbn):
-    return sql_query(INSERT_LISTING, listing_id, price, listing_status, listing_condition, user_id, order_basket_id, book_isbn)
-#11
-def matchOrderBasketListing(order_basket_id):
-    return sql_query(MATCH_ORDER_BASKET_LISTING, order_basket_id)
-#14
-def matchPublisherBook(pub_id):
-    return sql_query(MATCH_PUBLISHER_BOOK, pub_id);
-#17
-def sortLowestPrice(book_isbn):
-    return sql_query(SORT_LOWEST_PRICE, book_isbn)
-#6
-def insertPublisher(pub_id, pub_name):
-    return sql_query(INSERT_PUBLISHER, pub_id, pub_name)
-
-#3
-def insertBook(isbn, subject, title, description, pub_id):
-    return sql_query(INSERT_BOOK, isbn, subject, title, description, pub_id)
-#9
-def insertOrderBasket(order_basket_id, user_id, address, date_made, order_basket_status):
-    return sql_query(INSERT_ORDER_BASKET, order_basket_id, user_id, address, date_made, order_basket_status)
-
-#12
-def matchOrderUser(order_basket_id):
-    return sql_query(MATCH_ORDER_USER, order_basket_id)
-
-#15
-def matchBookListingID(isbn):
-    return sql_query(MATCH_BOOK_LISTING_ID, isbn)
-
-
-#18
-def sumOrderBasket(listing_id):
-    return sql_query(SUM_ORDER_BASKET, listing_id)
-
-
-
 
