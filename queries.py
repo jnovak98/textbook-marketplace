@@ -115,3 +115,5 @@ GET_LISTING_ORDER_BASKET_ID = ("SELECT listing.listing_id, listing.price, listin
 BUY_LISTING = ("UPDATE listing SET listing_status = 'SOLD' WHERE listing_id = %s")
 
 BUY_ORDER_BASKET = ("UPDATE order_basket SET order_basket_status = 'CLOSED' WHERE order_basket_id = %s")
+
+DELETE_ORDER_BASKET = ("DELETE FROM order_basket WHERE order_basket_id = %s")

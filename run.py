@@ -214,6 +214,8 @@ def account():
         listings = sql_query(GET_LISTING_ORDER_BASKET_ID, params=(basket_id, ))
         for listing in listings:
             sql_execute(BUY_LISTING,params=(listing[0], ))
+
+        sql_execute(DELETE_ORDER_BASKET, params=(basket_id, ))
         return redirect(url_for('account'))
 
     user_details = {'username':g.user['id']}
