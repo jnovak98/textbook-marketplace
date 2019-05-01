@@ -34,9 +34,7 @@ def sql_execute(sql, params):
     cursor.close()
     db.close()
 
-
 # A function that redirects user to the login page
-
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -208,9 +206,11 @@ def new_order():
 
         return redirect(url_for('account'))
 
+# User's account page
 @app.route('/account', methods=('GET', 'POST'))
 @login_required
 def account():
+    # Purschasing an order basket
     if request.method == 'POST':
         basket_id=request.form['order_basket_id']
         sql_execute(BUY_ORDER_BASKET,params=(basket_id, ))
@@ -218,11 +218,13 @@ def account():
         for listing in listings:
             sql_execute(BUY_LISTING,params=(listing[0], ))
 
+        # Delete order basket once it is completed. 
         sql_execute(DELETE_ORDER_BASKET, params=(basket_id, ))
         return redirect(url_for('account'))
 
     user_details = {'username':g.user['id']}
 
+    # List all the listing for a user. 
     listing_search = sql_query(MATCH_LISTING_USERID, params=(g.user['id'], ))
     listings = []
     for x in listing_search:
@@ -235,7 +237,7 @@ def account():
         listings.append(sample_listing)
 
 
-
+    # show all the user's order baskets 
     user_order_basket_search = sql_query(GET_ORDER_BASKET_USER_ID, params=(g.user['id'], ))
     order_baskets = []
     for x in user_order_basket_search:
@@ -262,19 +264,7 @@ def account():
     user_details = {'username': sql_query(GET_USER_FROM_ID, params=(g.user['id'], ))[0][0].decode("utf-8")}
     return render_template('account.html', user_details=user_details,listings=listings,order_baskets=order_baskets,unordered_baskets=unordered_baskets)
 
-#@app.route('/', methods=['GET', 'POST'])
-def template_response_with_data():
-    print(request.form)
-    if "buy-book" in request.form:
-        book_id = int(request.form["buy-book"])
-        sql = "delete from book where id={book_id}".format(book_id=book_id)
-        sql_execute(sql)
-    template_data = {}
-    sql = "select id, title from book order by title"
-    books = sql_query(sql)
-    template_data['books'] = books
-    return render_template('home-w-data.html', template_data=template_data)
-
+# User registration page
 @app.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
@@ -299,6 +289,7 @@ def register():
 
     return render_template('register.html')
 
+# User login page 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
@@ -321,11 +312,13 @@ def login():
 
     return render_template('login.html')
 
+# Logout page 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
 
+# Continue session
 @app.before_request
 def load_logged_in_user():
     user_id = session.get('user_id')
