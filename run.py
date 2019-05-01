@@ -25,7 +25,7 @@ def sql_query(sql, params):
     db.close()
     return result
 
-
+# A function that changes data in the databases 
 def sql_execute(sql, params):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor(prepared = True)
@@ -35,7 +35,8 @@ def sql_execute(sql, params):
     db.close()
 
 
-# User log in
+# A function that redirects user to the login page
+
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -216,6 +217,8 @@ def account():
         listings = sql_query(GET_LISTING_ORDER_BASKET_ID, params=(basket_id, ))
         for listing in listings:
             sql_execute(BUY_LISTING,params=(listing[0], ))
+
+        sql_execute(DELETE_ORDER_BASKET, params=(basket_id, ))
         return redirect(url_for('account'))
 
     user_details = {'username':g.user['id']}
