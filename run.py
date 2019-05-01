@@ -48,8 +48,10 @@ def login_required(view):
 @app.route('/')
 @login_required
 def index():
-    #we havent decided what these books should be, maybe books with most recently made listings?
+    # Query to get every book in the database. 
     book = sql_query(GET_EVERY_BOOK, params = ())
+
+    # Selects the top 3 book and displays the title, subject,description,isbn, author
     title1 = book[0][2].decode("utf-8") 
     subject1 = book[0][1].decode("utf-8")
     description1 = book[0][5].decode("utf-8")
@@ -84,6 +86,7 @@ def search():
         # these books should be every book in the DB that contains "search_query",
         # either in the name or description, based on how much it shows up
 
+        # User will search for a book based on its title. Shows all the book with the same title. 
         book_search = sql_query(GET_BOOK_TITLE, params=(search_query, ))
         listofbooks = []
 
@@ -95,7 +98,6 @@ def search():
             sample_book["isbn"] = x[3].decode("utf-8")
             sample_book["author"] = x[4].decode("utf-8")
             listofbooks.append(sample_book)
-
         #      'authors': [{'author_name': 'Author'}]}]
         return render_template('search.html', books=listofbooks, query=search_query)
     else:
@@ -115,8 +117,8 @@ def book_listings(isbn):
 
         book_details={'title': title, 'subject': subject, 'description': description,
             'isbn': isbn, 'author': author}
-        # listings of 'isbn' that are available. Make sure this includes the username of the user who made the listing
 
+        # Based on the book isbn, return the listings for the specific book.
         listing_search = sql_query(GET_LISTING_BOOK_ISBN, params=(isbn,))
         listoflistings = []
         for x in listing_search:
@@ -132,20 +134,21 @@ def book_listings(isbn):
 
         return render_template('book-listings.html', book=book_details, listings=listoflistings, baskets=baskets)
 
+    # When a user is adding to basket, they will be redirected to the accounts page. Order basket will show the listing.
     elif request.method == 'POST':
         l_id = request.form['listing_id']
-        print(l_id)
         ob_id = request.form['order_basket_id']
-    
         #add listing_id to order_basket with id=order_basket_id
         vals = (ob_id,l_id)
         sql_execute(UPDATE_LISTING, params=(ob_id, l_id))
         return redirect(url_for('account'))
 
+# When a user does not have a order basket yet, they will be redirecred to their accounts page and they can open an order basket. 
 @app.errorhandler(werkzeug.exceptions.BadRequest)
 def handle_bad_request(e):
     return redirect(url_for('account'))
 
+# Make listing for a book. 
 @app.route('/make-listing', methods=('GET', 'POST'))
 @login_required
 def make_listing():
@@ -155,22 +158,25 @@ def make_listing():
         isbn = request.form['isbn']
         price = request.form['price']
         listing_condition = request.form['listing_condition']
-        #add this listing to DB (get user from g.user['id'])
 
+        #add this listing to DB (get user from g.user['id'])
         bookCount = sql_query(GET_NUMISBN, params = (isbn, ))
         # this should check if a book with ISBN 'isbn' already exists
         if (bookCount[0])[0] > 0:
-
+            # If it doesn't exist, it will insert new listing to the database. 
             sql_execute(INSERT_LISTING, params = (price, 'SELLING', listing_condition, g.user['id'], isbn))
             return redirect(url_for('book_listings', isbn=isbn))
         else:
             return redirect(url_for('add_book', isbn = isbn, price=price, listing_condition=listing_condition))
 
+# Add a book if it does not exist in the database. 
 @app.route('/add-book/<isbn>/<price>/<listing_condition>', methods=('GET', 'POST'))
 @login_required
 def add_book(isbn, price, listing_condition):
     if request.method == 'GET':
         return render_template('add-book.html', isbn=isbn, price=price, listing_condition=listing_condition)
+
+    # Insert a book given the user input. 
     elif request.method == 'POST':
         subject = request.form['subject']
         title = request.form['title']
@@ -187,14 +193,16 @@ def add_book(isbn, price, listing_condition):
 
         return redirect(url_for('book_listings', isbn=isbn))
 
+# When a user creates a new order. 
 @app.route('/new-order', methods=('GET', 'POST'))
 @login_required
 def new_order():
     if request.method == 'GET':
         return render_template('new-order.html')
     elif request.method == 'POST':
+        # Ask the user for their home address
         address = request.form['address']
-        #add new order basket for user at given address
+        # add new order basket for user at given address. 
         sql_execute(INSERT_ORDER_BASKET, params=(g.user['id'], address, 'OPEN'))
 
         return redirect(url_for('account'))
